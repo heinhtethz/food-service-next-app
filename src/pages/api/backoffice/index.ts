@@ -1,13 +1,26 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import prisma from "@/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = {
-  name: string;
+const backoffice = async (req: NextApiRequest, res: NextApiResponse) => {
+  const method = req.method;
+  if (method === "POST") {
+    const { name, email } = req.body;
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+    if (existingUser?.email === email) return res.send(400);
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+      },
+    });
+    return res.send(200);
+  }
+  res.send(405);
 };
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json({ name: "Backoffice api" });
-}
+export default backoffice;
