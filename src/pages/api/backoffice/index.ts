@@ -8,10 +8,10 @@ const backoffice = async (req: NextApiRequest, res: NextApiResponse) => {
     const { name, email } = req.body;
     const existingUser = await prisma.user.findFirst({
       where: {
-        email,
+        email: email,
       },
     });
-    if (existingUser?.email === email) return res.send(400);
+    if (existingUser) return res.send(400);
     await prisma.user.create({
       data: {
         name,
