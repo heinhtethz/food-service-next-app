@@ -13,7 +13,10 @@ const BackofficeApp = () => {
       },
       body: JSON.stringify(user),
     });
-    console.log(response);
+    const data = await response.json();
+    if (data !== 200) {
+      alert("User already exists");
+    }
   };
   return (
     <Box
