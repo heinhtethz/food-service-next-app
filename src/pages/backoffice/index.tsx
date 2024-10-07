@@ -1,12 +1,18 @@
+import Layout from "@/component/Layout";
+import { config } from "@/config/config";
 import { Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const BackofficeApp = () => {
+  const { data, status } = useSession();
+  const router = useRouter();
   const [user, setUser] = useState({ name: "", email: "" });
   const createNewUser = async () => {
     const valid = user.name && user.email;
     if (!valid) alert("Name and email are required");
-    const response = await fetch("http://localhost:3000/api/backoffice", {
+    const response = await fetch(`${config.apiBaseUrl}/backoffice`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,6 +24,13 @@ const BackofficeApp = () => {
       alert("User already exists");
     }
   };
+
+  useEffect(() => {
+    if (!data && status !== "loading") {
+      router.push("auth/signin");
+    }
+  }, [data]);
+
   return (
     <Box
       sx={{
