@@ -6,16 +6,18 @@ const backoffice = async (req: NextApiRequest, res: NextApiResponse) => {
   const method = req.method;
   if (method === "POST") {
     const { name, email } = req.body;
-    const existingUser = await prisma.user.findFirst({
+    const existingUser = await prisma.users.findFirst({
       where: {
         email: email,
       },
     });
     if (existingUser) return res.send(400);
-    await prisma.user.create({
+    await prisma.users.create({
       data: {
         name,
         email,
+        password: "password",
+        companyId: 2,
       },
     });
     return res.send(200);
