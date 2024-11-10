@@ -1,7 +1,8 @@
 //src / store / slices / counterSlice.ts
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
+
 interface CounterState {
   isLoading: boolean;
   value: number;
@@ -15,7 +16,7 @@ const initialState: CounterState = {
   data: {},
 };
 
-export const counterSlice = createSlice({
+const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
