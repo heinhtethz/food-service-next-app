@@ -1,39 +1,28 @@
-import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { ReactNode } from "react";
+import { Box } from "@mui/material";
+import { useSession } from "next-auth/react";
+import { ReactNode, useEffect } from "react";
+import NavBar from "./NavBar";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchData } from "@/store/slices/appSlice";
 
 interface Props {
+  title?: string;
   children: ReactNode;
 }
 
-const Layout = ({ children }: Props) => {
-  const { data } = useSession();
+const Layout = ({ title, children }: Props) => {
+  const { data, status } = useSession();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      dispatch(fetchData());
+    }
+  }, [data, status, dispatch]);
+
   return (
     <Box>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Food Service
-          </Typography>
-          {data ? (
-            <Button
-              color="inherit"
-              onClick={() => {
-                signOut({ callbackUrl: "/auth/signin" });
-              }}
-            >
-              Log Out
-            </Button>
-          ) : (
-            <Button
-              color="inherit"
-              onClick={() => signIn("google", { callbackUrl: "/auth/signin" })}
-            >
-              Log In
-            </Button>
-          )}
-        </Toolbar>
-      </AppBar>
+      <NavBar title={title} />
       {children}
     </Box>
   );

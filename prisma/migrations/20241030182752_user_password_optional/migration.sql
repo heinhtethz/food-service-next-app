@@ -2,6 +2,7 @@
 CREATE TABLE "Company" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
     "isArchived" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -14,7 +15,7 @@ CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
+    "password" TEXT,
     "companyId" INTEGER NOT NULL,
     "isArchived" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -99,7 +100,7 @@ CREATE TABLE "MenusAddonCategories" (
 );
 
 -- CreateTable
-CREATE TABLE "ManusMenuCategoriesLocations" (
+CREATE TABLE "MenusMenuCategoriesLocations" (
     "id" SERIAL NOT NULL,
     "menuId" INTEGER NOT NULL,
     "menuCategoryId" INTEGER NOT NULL,
@@ -108,7 +109,7 @@ CREATE TABLE "ManusMenuCategoriesLocations" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "ManusMenuCategoriesLocations_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "MenusMenuCategoriesLocations_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -116,6 +117,7 @@ CREATE TABLE "Tables" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "locationId" INTEGER NOT NULL,
+    "assetUrl" TEXT NOT NULL,
     "isArchived" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -142,13 +144,13 @@ ALTER TABLE "MenusAddonCategories" ADD CONSTRAINT "MenusAddonCategories_menuId_f
 ALTER TABLE "MenusAddonCategories" ADD CONSTRAINT "MenusAddonCategories_addonCategoryId_fkey" FOREIGN KEY ("addonCategoryId") REFERENCES "AddonCategories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ManusMenuCategoriesLocations" ADD CONSTRAINT "ManusMenuCategoriesLocations_menuId_fkey" FOREIGN KEY ("menuId") REFERENCES "Menus"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MenusMenuCategoriesLocations" ADD CONSTRAINT "MenusMenuCategoriesLocations_menuId_fkey" FOREIGN KEY ("menuId") REFERENCES "Menus"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ManusMenuCategoriesLocations" ADD CONSTRAINT "ManusMenuCategoriesLocations_menuCategoryId_fkey" FOREIGN KEY ("menuCategoryId") REFERENCES "MenuCategories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MenusMenuCategoriesLocations" ADD CONSTRAINT "MenusMenuCategoriesLocations_menuCategoryId_fkey" FOREIGN KEY ("menuCategoryId") REFERENCES "MenuCategories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ManusMenuCategoriesLocations" ADD CONSTRAINT "ManusMenuCategoriesLocations_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "Locations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MenusMenuCategoriesLocations" ADD CONSTRAINT "MenusMenuCategoriesLocations_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "Locations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Tables" ADD CONSTRAINT "Tables_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "Locations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

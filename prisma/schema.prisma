@@ -16,6 +16,7 @@ datasource db {
 model Company {
   id         Int         @id @default(autoincrement())
   name       String
+  address    String
   isArchived Boolean     @default(false)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @default(now()) @updatedAt
@@ -24,15 +25,15 @@ model Company {
 }
 
 model Users {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   name       String
-  email      String   @unique
-  password   String
+  email      String    @unique
+  password   String?
   companyId  Int
-  company    Company  @relation(fields: [companyId], references: [id])
-  isArchived Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
+  company    Company @relation(fields: [companyId], references: [id])
+  isArchived Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
 }
 
 model AddonCategories {
@@ -62,11 +63,11 @@ model Locations {
   name                         String
   address                      String
   companyId                    Int
-  company                      Company                        @relation(fields: [companyId], references: [id])
+  company                      Company                     @relation(fields: [companyId], references: [id])
   isArchived                   Boolean                        @default(false)
   createdAt                    DateTime                       @default(now())
   updatedAt                    DateTime                       @default(now()) @updatedAt
-  ManusMenuCategoriesLocations ManusMenuCategoriesLocations[]
+  ManusMenuCategoriesLocations MenusMenuCategoriesLocations[]
   Tables                       Tables[]
 }
 
@@ -76,7 +77,7 @@ model MenuCategories {
   isArchived                   Boolean                        @default(false)
   createdAt                    DateTime                       @default(now())
   updatedAt                    DateTime                       @default(now()) @updatedAt
-  ManusMenuCategoriesLocations ManusMenuCategoriesLocations[]
+  ManusMenuCategoriesLocations MenusMenuCategoriesLocations[]
 }
 
 model Menus {
@@ -89,7 +90,7 @@ model Menus {
   createdAt                    DateTime                       @default(now())
   updatedAt                    DateTime                       @default(now()) @updatedAt
   MenusAddonCategories         MenusAddonCategories[]
-  ManusMenuCategoriesLocations ManusMenuCategoriesLocations[]
+  ManusMenuCategoriesLocations MenusMenuCategoriesLocations[]
 }
 
 model MenusAddonCategories {
@@ -103,7 +104,7 @@ model MenusAddonCategories {
   updatedAt       DateTime        @default(now()) @updatedAt
 }
 
-model ManusMenuCategoriesLocations {
+model MenusMenuCategoriesLocations {
   id             Int            @id @default(autoincrement())
   menuId         Int
   menus          Menus          @relation(fields: [menuId], references: [id])
@@ -120,9 +121,9 @@ model Tables {
   id         Int       @id @default(autoincrement())
   name       String
   locationId Int
+  assetUrl   String
   locations  Locations @relation(fields: [locationId], references: [id])
   isArchived Boolean   @default(false)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @default(now()) @updatedAt
 }
-
