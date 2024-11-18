@@ -8,6 +8,10 @@ import { fetchData } from "@/store/slices/appSlice";
 import { useDispatch } from "react-redux";
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    store.dispatch(fetchData());
+  }, []);
+
   return (
     <SessionProvider>
       <Provider store={store}>

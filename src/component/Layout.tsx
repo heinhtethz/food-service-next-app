@@ -1,9 +1,8 @@
 import { Box } from "@mui/material";
-import { useSession } from "next-auth/react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import NavBar from "./NavBar";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchData } from "@/store/slices/appSlice";
+import { useAppSelector } from "@/store/hooks";
+import { appData } from "@/store/slices/appSlice";
 
 interface Props {
   title?: string;
@@ -11,14 +10,8 @@ interface Props {
 }
 
 const Layout = ({ title, children }: Props) => {
-  const { data, status } = useSession();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      dispatch(fetchData());
-    }
-  }, [data, status, dispatch]);
+  const { isLoading } = useAppSelector((state) => state.app);
+  if (isLoading) return null;
 
   return (
     <Box>

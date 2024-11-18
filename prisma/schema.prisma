@@ -19,21 +19,21 @@ model Company {
   address    String
   isArchived Boolean     @default(false)
   createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @default(now()) @updatedAt
+  updatedAt  DateTime    @updatedAt
   users      Users[]
   Locations  Locations[]
 }
 
 model Users {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   name       String
-  email      String    @unique
+  email      String   @unique
   password   String?
   companyId  Int
-  company    Company @relation(fields: [companyId], references: [id])
-  isArchived Boolean   @default(false)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now()) @updatedAt
+  company    Company  @relation(fields: [companyId], references: [id])
+  isArchived Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model AddonCategories {
@@ -42,7 +42,7 @@ model AddonCategories {
   isRequired           Boolean                @default(true)
   isArchived           Boolean                @default(false)
   createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @default(now()) @updatedAt
+  updatedAt            DateTime               @updatedAt
   addons               Addons[]
   MenusAddonCategories MenusAddonCategories[]
 }
@@ -55,7 +55,7 @@ model Addons {
   addonCategories AddonCategories @relation(fields: [addonCategoryId], references: [id])
   isArchived      Boolean         @default(false)
   createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @default(now()) @updatedAt
+  updatedAt       DateTime        @updatedAt
 }
 
 model Locations {
@@ -63,10 +63,10 @@ model Locations {
   name                         String
   address                      String
   companyId                    Int
-  company                      Company                     @relation(fields: [companyId], references: [id])
+  company                      Company                        @relation(fields: [companyId], references: [id])
   isArchived                   Boolean                        @default(false)
   createdAt                    DateTime                       @default(now())
-  updatedAt                    DateTime                       @default(now()) @updatedAt
+  updatedAt                    DateTime                       @updatedAt
   ManusMenuCategoriesLocations MenusMenuCategoriesLocations[]
   Tables                       Tables[]
 }
@@ -76,7 +76,7 @@ model MenuCategories {
   name                         String
   isArchived                   Boolean                        @default(false)
   createdAt                    DateTime                       @default(now())
-  updatedAt                    DateTime                       @default(now()) @updatedAt
+  updatedAt                    DateTime                       @updatedAt
   ManusMenuCategoriesLocations MenusMenuCategoriesLocations[]
 }
 
@@ -88,7 +88,7 @@ model Menus {
   assetUrl                     String
   isArchived                   Boolean                        @default(false)
   createdAt                    DateTime                       @default(now())
-  updatedAt                    DateTime                       @default(now()) @updatedAt
+  updatedAt                    DateTime                       @updatedAt
   MenusAddonCategories         MenusAddonCategories[]
   ManusMenuCategoriesLocations MenusMenuCategoriesLocations[]
 }
@@ -101,7 +101,7 @@ model MenusAddonCategories {
   addonCategories AddonCategories @relation(fields: [addonCategoryId], references: [id])
   isArchived      Boolean         @default(false)
   createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @default(now()) @updatedAt
+  updatedAt       DateTime         @updatedAt
 }
 
 model MenusMenuCategoriesLocations {
@@ -114,7 +114,7 @@ model MenusMenuCategoriesLocations {
   locations      Locations      @relation(fields: [locationId], references: [id])
   isArchived     Boolean        @default(false)
   createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @default(now()) @updatedAt
+  updatedAt      DateTime       @updatedAt
 }
 
 model Tables {
@@ -125,5 +125,5 @@ model Tables {
   locations  Locations @relation(fields: [locationId], references: [id])
   isArchived Boolean   @default(false)
   createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now()) @updatedAt
+  updatedAt  DateTime  @updatedAt
 }
