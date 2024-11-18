@@ -5,14 +5,14 @@ import { useAppSelector } from "@/store/hooks";
 import { appData, fetchData } from "@/store/slices/appSlice";
 import { Box, Button, TextField } from "@mui/material";
 import { Menus } from "@prisma/client";
-
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 
 const EditAddonCategory = () => {
+  const router = useRouter();
   const { menus, menusAddonCategories, addonCategories } =
     useAppSelector(appData);
-  const addonCategoryId = useParams().id;
+  const addonCategoryId = router.query.id as string;
   const [menu, setMenu] = useState<Menus[]>();
   const [addonCategory, setAddonCategory] = useState({
     name: "",

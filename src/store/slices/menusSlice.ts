@@ -1,6 +1,5 @@
 import { Menus } from "@prisma/client";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "..";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface MenuState {
   isLoading: boolean;
@@ -22,8 +21,16 @@ const menusSlice = createSlice({
     setMenus: (state, action) => {
       state.items = action.payload;
     },
+    addMenu: (state, action: PayloadAction<Menus>) => {
+      state.items = [...state.items, action.payload];
+    },
+    updateMenu: (state, action: PayloadAction<Menus>) => {
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
   },
 });
 
-export const { setMenus } = menusSlice.actions;
+export const { setMenus, addMenu, updateMenu } = menusSlice.actions;
 export default menusSlice.reducer;

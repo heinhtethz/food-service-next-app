@@ -2,6 +2,7 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import { config } from "@/config/config";
 import { setMenus } from "./menusSlice";
@@ -30,7 +31,7 @@ export const fetchData = createAsyncThunk(
   "data/fetchData",
   async (locationId, thunkAPI) => {
     thunkAPI.dispatch(setAppLoading(true));
-    const response = await fetch(`${config.apiBaseUrl}/api/app`);
+    const response = await fetch(`${config.apiBaseUrl}/app`);
     const {
       menus,
       menuCategories,
@@ -61,7 +62,7 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    setAppLoading: (state, action) => {
+    setAppLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
   },

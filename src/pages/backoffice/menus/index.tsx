@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardActionArea,
@@ -16,7 +16,8 @@ import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { menuByLocationId } from "@/utils";
 import Layout from "@/component/Layout";
-import CreateMenus from "./CreateMenus";
+import Link from "next/link";
+import CreateNewMenus from "./CreateNewMenus";
 
 const Menus = () => {
   const { menus, menusMenuCategoriesLocations } = useAppSelector(appData);
@@ -42,31 +43,34 @@ const Menus = () => {
           {validMenus.length ? (
             validMenus?.map((menu) => {
               return (
-                <Card
-                  key={menu.name}
-                  sx={{ width: 250, mr: 2, borderRadius: 2, mt: 2 }}
+                <Link
+                  href={`/backoffice/menus/${menu.id}`}
+                  key={menu.id}
+                  style={{ textDecoration: "none" }}
                 >
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={menu.assetUrl}
-                      alt="green iguana"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {menu.name}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="inherit"
-                        component="div"
-                      >
-                        {menu.price} Kyats
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
+                  <Card sx={{ width: 250, mr: 2, borderRadius: 2, mt: 2 }}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={menu.assetUrl}
+                        alt="green iguana"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {menu.name}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="inherit"
+                          component="div"
+                        >
+                          {menu.price} Kyats
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Link>
               );
             })
           ) : (
@@ -79,7 +83,7 @@ const Menus = () => {
               Create New Menu
             </DialogTitle>
             <DialogActions>
-              <CreateMenus setOpen={setOpen} />
+              <CreateNewMenus setOpen={setOpen} />
             </DialogActions>
           </Dialog>
         </Box>

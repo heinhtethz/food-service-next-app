@@ -8,9 +8,11 @@ import { AddonCategories } from "@prisma/client";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
 import AutocompleteComponent from "@/component/Autocomplete";
+import { useRouter } from "next/router";
 
 const EditAddon = () => {
-  const addonId = useParams().id;
+  const router = useRouter();
+  const addonId = router.query.id as string;
   const currentAddonId = Number(addonId);
   const { addons, addonCategories } = useAppSelector(appData);
   const [addonCategory, setAddonCategory] = useState<AddonCategories[]>();

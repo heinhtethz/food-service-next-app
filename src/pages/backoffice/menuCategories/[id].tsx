@@ -10,16 +10,18 @@ import { useParams } from "react-router-dom";
 import {
   getSelectedLocationId,
   menuByLocationId,
-  menusMenuCategoriesLocationsByLocation,
+  menusMenuCategoriesLocationsByLocationId,
 } from "@/utils";
 import { useAppSelector } from "@/store/hooks";
 import { appData, fetchData } from "@/store/slices/appSlice";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
 import AutocompleteComponent from "@/component/Autocomplete";
+import { useRouter } from "next/router";
 
 const EditMenuCategory = () => {
-  const menuCategoryId = useParams().id; //string
+  const router = useRouter();
+  const menuCategoryId = router.query.id as string;
   const selectedLocationId = getSelectedLocationId();
   const { menus, menuCategories, menusMenuCategoriesLocations } =
     useAppSelector(appData);
@@ -28,7 +30,7 @@ const EditMenuCategory = () => {
     menus
   ).map((item) => ({ id: item.id, name: item.name }));
 
-  const defaultMenuId = menusMenuCategoriesLocationsByLocation(
+  const defaultMenuId = menusMenuCategoriesLocationsByLocationId(
     menusMenuCategoriesLocations
   )
     .filter((item) => item.menuCategoryId === Number(menuCategoryId))

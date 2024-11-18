@@ -93,8 +93,9 @@ const MenuCategories = () => {
         >
           {validMenuCategories.map((item) => (
             <Link
-              href={`/backoffice/menuCategories/EditMenuCategory/${item.id}`}
+              href={`/backoffice/menuCategories/${item.id}`}
               key={item.id}
+              style={{ textDecoration: "none" }}
             >
               <DemoPaper
                 square={false}

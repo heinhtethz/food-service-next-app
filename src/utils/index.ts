@@ -76,7 +76,7 @@ export const addonByLocationId = (
   );
 };
 
-export const menusMenuCategoriesLocationsByLocation = (
+export const menusMenuCategoriesLocationsByLocationId = (
   menusMenuCategoriesLocations: MenusMenuCategoriesLocations[]
 ) => {
   const selectedLocationId = getSelectedLocationId();

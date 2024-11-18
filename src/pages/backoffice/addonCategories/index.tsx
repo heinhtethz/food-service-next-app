@@ -102,9 +102,10 @@ const AddonCategories = () => {
         >
           {validAddonCategories.map((item) => (
             <Link
-              href={`/backoffice/addonCategories/EditAddonCategory/${item.id}`}
+              href={`/backoffice/addonCategories/${item.id}`}
               onChange={() => console.log(item.id)}
               key={item.id}
+              style={{ textDecoration: "none" }}
             >
               <DemoPaper square={false} elevation={5}>
                 <Typography variant="body2" sx={{ mt: 10 }}>
