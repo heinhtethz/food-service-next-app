@@ -26,6 +26,8 @@ import CategoryIcon from "@mui/icons-material/Category";
 import TableRestaurantIcon from "@mui/icons-material/TableRestaurant";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
+import logoImg from "../assets/pngtree-food-logo.png";
 
 interface Props {
   title?: string;
@@ -36,7 +38,12 @@ const NavBar = ({ title }: Props) => {
   const [open, setOpen] = useState(false);
 
   const sidebarMenuItems = [
-    { id: 1, label: "Orders", icon: <LocalMallIcon />, route: "/orders" },
+    {
+      id: 1,
+      label: "Orders",
+      icon: <LocalMallIcon />,
+      route: "/backoffice/orders",
+    },
     {
       id: 2,
       label: "Menu Categories",
@@ -127,15 +134,14 @@ const NavBar = ({ title }: Props) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ bgcolor: "white" }}>
         <Toolbar>
           {data ? (
             <IconButton
               size="large"
               edge="start"
-              color="inherit"
+              color="default"
               aria-label="menu"
-              sx={{ mr: 2 }}
               onClick={() => setOpen(true)}
             >
               <MenuIcon />
@@ -143,12 +149,17 @@ const NavBar = ({ title }: Props) => {
           ) : (
             <span></span>
           )}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Image src={logoImg} width={50} height={50} alt="Logo" />
+          <Typography
+            variant="h5"
+            sx={{ flexGrow: 1, color: "#BA0101", fontFamily: "fantasy" }}
+          >
             {title ? `Food Service Pos - ${title}` : `Food Service Pos`}
           </Typography>
           {data ? (
             <Button
-              color="inherit"
+              variant="contained"
+              sx={{ bgcolor: "#BA0101", color: "white" }}
               onClick={() => {
                 signOut({ callbackUrl: "/auth/signin" });
               }}
@@ -157,7 +168,7 @@ const NavBar = ({ title }: Props) => {
             </Button>
           ) : (
             <Button
-              color="inherit"
+              variant="contained"
               onClick={() => {
                 signIn("google", { callbackUrl: "/backoffice" });
               }}

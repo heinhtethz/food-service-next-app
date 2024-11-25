@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 import "../styles/global.css";
 import { useEffect } from "react";
 import { fetchData } from "@/store/slices/appSlice";
-import { useDispatch } from "react-redux";
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {

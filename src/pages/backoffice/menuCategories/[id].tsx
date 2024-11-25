@@ -5,8 +5,7 @@ import {
   Switch,
   TextField,
 } from "@mui/material";
-import { useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 import {
   getSelectedLocationId,
   menuByLocationId,
@@ -59,11 +58,10 @@ const EditMenuCategory = () => {
   };
 
   const updateMenuCategory = async () => {
-    await fetch(`${config.apiBaseUrl}/menu-categories`, {
+    await fetch(`${config.apiBaseUrl}/menuCategories`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer`,
       },
       body: JSON.stringify(updateData),
     });
