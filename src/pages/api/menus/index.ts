@@ -25,7 +25,7 @@ const menusHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         })
       )
     );
-    res.status(200).send(newMenu);
+    return res.status(200).send(newMenu);
   } else if (req.method === "PUT") {
     const {
       menuId,
@@ -71,7 +71,6 @@ const menusHandler = async (req: NextApiRequest, res: NextApiResponse) => {
               addedMenuCategoryId.includes(item.menuCategoryId)
           )
           .map((item) => item.id);
-        console.log("removedData :", removedData);
         if (removedData.length) {
           await prisma.menusMenuCategoriesLocations.updateMany({
             data: {
@@ -108,7 +107,22 @@ const menusHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           });
       }
     }
-    res.status(200).send(updateMenu);
+    return res.status(200).send(updateMenu);
+  } else if (req.method === "DELETE") {
+    const menuId = req.query.id;
+    if (!menuId) return res.status(400).send("Bad Request");
+    await prisma.menus.update({
+      data: {
+        isArchived: true,
+        updatedAt: new Date(),
+      },
+      where: {
+        id: Number(menuId),
+      },
+    });
+    return res.send(200);
+  } else {
+    res.status(405).send("Method not allowed");
   }
 };
 

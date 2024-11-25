@@ -1,10 +1,12 @@
 import Layout from "@/component/Layout";
+import WelcomePageTopBar from "@/component/welcomePageTopBar";
 import { Box, Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 
 const SignIn = () => {
   return (
-    <Layout title="Sign In">
+    <Box>
+      <WelcomePageTopBar />
       <Box
         sx={{
           display: "flex",
@@ -22,7 +24,7 @@ const SignIn = () => {
           Sign In
         </Button>
       </Box>
-    </Layout>
+    </Box>
   );
 };
 

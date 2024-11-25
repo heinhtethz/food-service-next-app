@@ -1,16 +1,17 @@
-import Layout from "@/component/Layout";
-import { Box, ImageList, Typography } from "@mui/material";
+import Features from "@/component/Features";
+import Header from "@/component/Header";
+import WelcomePageTopBar from "@/component/welcomePageTopBar";
+import { Box } from "@mui/material";
 
 const FoodServiceApp = () => {
   return (
-    <Layout>
-      <Typography
-        variant="h4"
-        sx={{ display: "flex", justifyContent: "center", mt: 2 }}
-      >
-        Food Service App{" "}
-      </Typography>
-    </Layout>
+    <Box>
+      <WelcomePageTopBar />
+      <Box sx={{ mx: 10, maxWidth: { md: "100%", lg: "1440px" }, mt: 5 }}>
+        <Header />
+        <Features />
+      </Box>
+    </Box>
   );
 };
 

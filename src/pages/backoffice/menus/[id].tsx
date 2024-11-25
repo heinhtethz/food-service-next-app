@@ -5,15 +5,25 @@ import { config } from "@/config/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocations";
-import { updateMenu } from "@/store/slices/menusSlice";
+import { removeMenu, updateMenu } from "@/store/slices/menusSlice";
 import {
   getSelectedLocationId,
   menuByLocationId,
   menuCategoryByLocationId,
   menusMenuCategoriesLocationsByLocationId,
 } from "@/utils";
-import { Box, Button, Chip, TextField } from "@mui/material";
-import { AddonCategories, Menus } from "@prisma/client";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  TextField,
+  Typography,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Menus } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -26,6 +36,7 @@ const EditMenu = () => {
   const id = router.query.id as string;
   const menuId = Number(id);
   const menu = menus.find((item) => item.id === menuId) as Menus;
+  console.log(menu);
   const defaultMenu = menuByLocationId(
     menusMenuCategoriesLocations,
     menus
@@ -38,6 +49,7 @@ const EditMenu = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const [editMenu, setEditMenu] = useState<Partial<Menus>>();
+  const [open, setOpen] = useState<boolean>(false);
 
   const validMenuCategory = menuCategoryByLocationId(
     menusMenuCategoriesLocations,
@@ -87,6 +99,15 @@ const EditMenu = () => {
     const responseData = await response.json();
     dispatch(updateMenu(responseData));
     dispatch(fetchMenusMenuCategoriesLocations(locationId));
+  };
+
+  const handleDeleteMenu = async () => {
+    await fetch(`${config.apiBaseUrl}/menus?id=${id}`, {
+      method: "DELETE",
+    });
+    dispatch(removeMenu(menu));
+    dispatch(fetchMenusMenuCategoriesLocations(locationId));
+    router.push("/backoffice/menus");
   };
 
   return (
@@ -156,11 +177,46 @@ const EditMenu = () => {
             );
           })}
         </Box>
-        <Box sx={{ margin: "0 auto" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <Button variant="contained" onClick={handleUpdateMenu}>
             Update
           </Button>
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={() => setOpen(true)}
+          >
+            Delete
+          </Button>
         </Box>
+        <Dialog open={open}>
+          <DialogContent>
+            <Typography variant="h6">
+              Are you sure to delete this menu?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleDeleteMenu();
+                setOpen(false);
+              }}
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Layout>
   );
