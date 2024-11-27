@@ -13,12 +13,14 @@ import {
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData, fetchData } from "@/store/slices/appSlice";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
 import { getSelectedLocationId, menuCategoryByLocationId } from "@/utils";
 import Link from "next/link";
+import { addMenuCategory } from "@/store/slices/menuCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocations";
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
   width: 120,
@@ -31,9 +33,10 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
 const MenuCategories = () => {
   const { menuCategories, menusMenuCategoriesLocations } =
     useAppSelector(appData);
-  const selectedLocationId = getSelectedLocationId();
+  const dispatch = useAppDispatch();
+  const selectedLocationId = getSelectedLocationId() as string;
   const [open, setOpen] = useState(false);
-  const [menuCategory, setMenuCategory] = useState("");
+  const [menuCategoryName, setMenuCategoryName] = useState("");
   const [checked, setChecked] = useState(true);
 
   const validMenuCategories = menuCategoryByLocationId(
@@ -41,24 +44,21 @@ const MenuCategories = () => {
     menuCategories
   );
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
-
   const createMenuCategory = async () => {
-    await fetch(`${config.apiBaseUrl}/menu-categories`, {
+    if (!menuCategoryName) return alert("Name is required...");
+    const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer`,
       },
       body: JSON.stringify({
-        name: menuCategory,
-        locationId: selectedLocationId,
-        isAvailable: checked,
+        name: menuCategoryName,
+        locationId: Number(selectedLocationId),
       }),
     });
-    fetchData();
+    const responseData = await response.json();
+    dispatch(addMenuCategory(responseData));
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
     setOpen(false);
   };
 
@@ -119,19 +119,9 @@ const MenuCategories = () => {
                 variant="outlined"
                 fullWidth
                 onChange={(evt) => {
-                  setMenuCategory(evt.target.value);
+                  setMenuCategoryName(evt.target.value);
                 }}
               />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={checked}
-                    onChange={handleChange}
-                    inputProps={{ "aria-label": "controlled" }}
-                  />
-                }
-                label="Required"
-              ></FormControlLabel>
 
               <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
                 <Button

@@ -101,17 +101,17 @@ model MenusAddonCategories {
   addonCategories AddonCategories @relation(fields: [addonCategoryId], references: [id])
   isArchived      Boolean         @default(false)
   createdAt       DateTime        @default(now())
-  updatedAt       DateTime         @updatedAt
+  updatedAt       DateTime        @updatedAt
 }
 
 model MenusMenuCategoriesLocations {
   id             Int            @id @default(autoincrement())
-  menuId         Int
-  menus          Menus          @relation(fields: [menuId], references: [id])
+  menuId         Int?
+  menus          Menus?         @relation(fields: [menuId], references: [id])
   menuCategoryId Int
   menuCategories MenuCategories @relation(fields: [menuCategoryId], references: [id])
-  locationId     Int
-  locations      Locations      @relation(fields: [locationId], references: [id])
+  locationId     Int?
+  locations      Locations?     @relation(fields: [locationId], references: [id])
   isArchived     Boolean        @default(false)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt

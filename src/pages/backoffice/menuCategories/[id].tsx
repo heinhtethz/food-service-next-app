@@ -1,29 +1,47 @@
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
   FormControlLabel,
   Switch,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import {
   getSelectedLocationId,
   menuByLocationId,
+  menuCategoryByLocationId,
   menusMenuCategoriesLocationsByLocationId,
 } from "@/utils";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData, fetchData } from "@/store/slices/appSlice";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
 import AutocompleteComponent from "@/component/Autocomplete";
 import { useRouter } from "next/router";
+import { MenuCategories } from "@prisma/client";
+import {
+  removeMenuCategory,
+  updateMenuCategory,
+} from "@/store/slices/menuCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocations";
 
 const EditMenuCategory = () => {
-  const router = useRouter();
-  const menuCategoryId = router.query.id as string;
-  const selectedLocationId = getSelectedLocationId();
   const { menus, menuCategories, menusMenuCategoriesLocations } =
     useAppSelector(appData);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const selectedLocationId = getSelectedLocationId() as string;
+  const id = router.query.id as string;
+  const menuCategoryId = Number(id);
+  const menuCategory = menuCategoryByLocationId(
+    menusMenuCategoriesLocations,
+    menuCategories
+  ).find((item) => item.id === menuCategoryId) as MenuCategories;
+
   const menusByLocation = menuByLocationId(
     menusMenuCategoriesLocations,
     menus
@@ -32,41 +50,61 @@ const EditMenuCategory = () => {
   const defaultMenuId = menusMenuCategoriesLocationsByLocationId(
     menusMenuCategoriesLocations
   )
-    .filter((item) => item.menuCategoryId === Number(menuCategoryId))
+    .filter(
+      (item) =>
+        item.menuCategoryId === Number(menuCategoryId) &&
+        item.isArchived === false
+    )
     .map((item) => item.menuId);
 
   const defaultMenus = menusByLocation.filter(
     (item) => defaultMenuId && defaultMenuId.includes(item.id)
   );
 
-  const selectedMenuCategoryName = menuCategories
-    .filter((item) => item.id === Number(menuCategoryId))
-    .map((item) => item.name)
-    .toString();
+  const [updateMenuId, setUpdateMenuId] = useState([] as Number[]);
+  const [updateData, setUpdateData] = useState<Partial<MenuCategories>>();
+  const [open, setOpen] = useState(false);
 
-  const [checked, setChecked] = useState(true);
-  const [updateData, setUpdateData] = useState({
-    name: "",
-    menus_id: [] as number[],
-    is_available: checked,
-    menu_categories_id: Number(menuCategoryId),
-    locations_id: Number(selectedLocationId),
-  });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
-
-  const updateMenuCategory = async () => {
-    await fetch(`${config.apiBaseUrl}/menuCategories`, {
+  const handleUpdateMenuCategory = async () => {
+    const isValid = updateData?.name || updateMenuId?.length;
+    if (!isValid) return alert("Pls fill at least one of this fields");
+    console.log(
+      updateData?.name,
+      menuCategory?.id,
+      updateMenuId,
+      "locationId",
+      Number(selectedLocationId)
+    );
+    const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updateData),
+      body: JSON.stringify({
+        ...updateData,
+        menuCategoryId: menuCategory?.id,
+        menuIds: updateMenuId,
+        locationId: Number(selectedLocationId),
+      }),
     });
+    const responseData = await response.json();
+    dispatch(updateMenuCategory(responseData));
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+  };
 
-    fetchData();
+  const handleDeleteMenuCategory = async () => {
+    const response = await fetch(
+      `${config.apiBaseUrl}/menuCategories?id=${id}&locationId=${selectedLocationId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    dispatch(removeMenuCategory(menuCategory));
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    setOpen(false);
+    if (response.ok) {
+      router.push("/backoffice/menuCategories");
+    }
   };
   return (
     <Layout title="Edit Menu Category">
@@ -74,39 +112,53 @@ const EditMenuCategory = () => {
         <TextField
           label="Name"
           fullWidth
-          defaultValue={selectedMenuCategoryName}
-          onChange={(evt) =>
-            setUpdateData({ ...updateData, name: evt.target.value })
-          }
+          defaultValue={menuCategory?.name}
+          onChange={(evt) => setUpdateData({ name: evt.target.value })}
         />
         <AutocompleteComponent
-          options={menus}
+          options={menusByLocation}
           defaultValue={defaultMenus}
           label="Menus"
           onChange={(options) =>
-            setUpdateData({
-              ...updateData,
-              menus_id: options.map((item) => item.id),
-            })
+            setUpdateMenuId(options.map((item) => item.id))
           }
         />
-        <Box sx={{ mt: 2 }}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={checked}
-                onChange={handleChange}
-                inputProps={{ "aria-label": "controlled" }}
-              />
-            }
-            label="*Required"
-          ></FormControlLabel>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Button variant="contained" onClick={() => updateMenuCategory()}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Button
+            variant="contained"
+            onClick={() => handleUpdateMenuCategory()}
+          >
             Update
           </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => setOpen(true)}
+          >
+            Delete
+          </Button>
         </Box>
+        <Dialog open={open}>
+          <DialogContent>
+            <Typography variant="h6">
+              Are you sure to delete this menu category?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleDeleteMenuCategory();
+              }}
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Layout>
   );

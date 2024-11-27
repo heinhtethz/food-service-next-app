@@ -15,7 +15,6 @@ export default async function handler(
       await prisma.menusMenuCategoriesLocations.findMany({
         where: {
           locationId: locationId,
-          isArchived: false,
         },
       });
     return res.status(200).send(menusMenuCategoriesLocations);
