@@ -36,15 +36,14 @@ const EditMenu = () => {
   const id = router.query.id as string;
   const menuId = Number(id);
   const menu = menus.find((item) => item.id === menuId) as Menus;
-  console.log(menu);
   const defaultMenu = menuByLocationId(
     menusMenuCategoriesLocations,
     menus
   ).find((item) => item.id === menuId) as Menus;
 
-  const [selectedMenuCategory, setSelectedMenuCateogry] = useState({
-    id: [] as Number[],
-  });
+  const [selectedMenuCategory, setSelectedMenuCateogry] = useState(
+    [] as Number[]
+  );
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
@@ -58,9 +57,11 @@ const EditMenu = () => {
 
   const menusMenuCategoriesLocationsByLocation =
     menusMenuCategoriesLocationsByLocationId(menusMenuCategoriesLocations);
+
   const defaultMenuCategoryId = menusMenuCategoriesLocationsByLocation
-    .filter((item) => item.menuId === menuId)
+    .filter((item) => item.menuId === menuId && item.isArchived === false)
     .map((item) => item.menuCategoryId);
+
   const defaultMenuCategory = menuCategories
     .filter((item) => defaultMenuCategoryId.includes(item.id))
     .map((item) => ({ id: item.id, name: item.name }));
@@ -75,7 +76,7 @@ const EditMenu = () => {
       editMenu?.price ||
       editMenu?.description ||
       editMenu?.assetUrl ||
-      selectedMenuCategory.id.length;
+      selectedMenuCategory.length;
     if (!isValid) return alert("please fill at least one of these fields");
 
     !editMenu?.name && setEditMenu({ name: defaultMenu?.name });
@@ -92,7 +93,7 @@ const EditMenu = () => {
       body: JSON.stringify({
         ...editMenu,
         menuId: menu.id,
-        menuCategoryId: selectedMenuCategory.id,
+        menuCategoryId: selectedMenuCategory,
         locationId,
       }),
     });
@@ -102,12 +103,17 @@ const EditMenu = () => {
   };
 
   const handleDeleteMenu = async () => {
-    await fetch(`${config.apiBaseUrl}/menus?id=${id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${config.apiBaseUrl}/menus?id=${id}&locationId=${locationId}`,
+      {
+        method: "DELETE",
+      }
+    );
     dispatch(removeMenu(menu));
     dispatch(fetchMenusMenuCategoriesLocations(locationId));
-    router.push("/backoffice/menus");
+    if (response.ok) {
+      router.push("/backoffice/menus");
+    }
   };
 
   return (
@@ -152,10 +158,7 @@ const EditMenu = () => {
           defaultValue={defaultMenuCategory}
           label="Menu Category"
           onChange={(options) => {
-            setSelectedMenuCateogry({
-              ...selectedMenuCategory,
-              id: options.map((item) => item.id),
-            });
+            setSelectedMenuCateogry(options.map((item) => item.id));
           }}
         />
         <Box sx={{ mt: 2, mb: 3, width: "100%" }}>
@@ -187,7 +190,7 @@ const EditMenu = () => {
             Update
           </Button>
           <Button
-            variant="contained"
+            variant="outlined"
             color="error"
             startIcon={<DeleteIcon />}
             onClick={() => setOpen(true)}

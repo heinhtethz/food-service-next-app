@@ -110,6 +110,7 @@ const menusHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(200).send(updateMenu);
   } else if (req.method === "DELETE") {
     const menuId = req.query.id;
+    const locationId = req.query.locationId;
     if (!menuId) return res.status(400).send("Bad Request");
     await prisma.menus.update({
       data: {
@@ -119,6 +120,10 @@ const menusHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       where: {
         id: Number(menuId),
       },
+    });
+    await prisma.menusMenuCategoriesLocations.updateMany({
+      data: { isArchived: true },
+      where: { menuId: Number(menuId), locationId: Number(locationId) },
     });
     return res.send(200);
   } else {

@@ -152,7 +152,6 @@ export default async function appHandler(
           locationId: {
             in: locationIds,
           },
-          isArchived: false,
         },
       });
     const menuCategoryIds = menusMenuCategoriesLocations.map(
