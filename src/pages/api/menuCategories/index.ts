@@ -26,7 +26,7 @@ const menuCategoryHandler = async (
       );
       const removingMenuIds = existingMenuIds.filter(
         (item) => !menuIds.includes(item)
-      );
+      ) as number[];
 
       if (addingMenuIds.length) {
         const removedData = existingData

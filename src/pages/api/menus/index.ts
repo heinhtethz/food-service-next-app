@@ -92,19 +92,19 @@ const menusHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             });
           });
         }
-      } else if (removedMenuCategoryId.length) {
-        const removeMenusMenuCategoriesLocations =
-          await prisma.menusMenuCategoriesLocations.updateMany({
-            data: {
-              isArchived: true,
-              updatedAt: new Date(),
-            },
-            where: {
-              menuId,
-              menuCategoryId: { in: removedMenuCategoryId },
-              isArchived: false,
-            },
-          });
+      }
+      if (removedMenuCategoryId.length) {
+        await prisma.menusMenuCategoriesLocations.updateMany({
+          data: {
+            isArchived: true,
+            updatedAt: new Date(),
+          },
+          where: {
+            menuId,
+            menuCategoryId: { in: removedMenuCategoryId },
+            isArchived: false,
+          },
+        });
       }
     }
     return res.status(200).send(updateMenu);

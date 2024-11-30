@@ -110,7 +110,7 @@ const EditMenu = () => {
       }
     );
     dispatch(removeMenu(menu));
-    dispatch(fetchMenusMenuCategoriesLocations(locationId));
+    setOpen(false);
     if (response.ok) {
       router.push("/backoffice/menus");
     }
@@ -213,7 +213,6 @@ const EditMenu = () => {
               color="error"
               onClick={() => {
                 handleDeleteMenu();
-                setOpen(false);
               }}
             >
               Delete

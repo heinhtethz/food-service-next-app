@@ -100,7 +100,6 @@ const EditMenuCategory = () => {
       }
     );
     dispatch(removeMenuCategory(menuCategory));
-    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
     setOpen(false);
     if (response.ok) {
       router.push("/backoffice/menuCategories");

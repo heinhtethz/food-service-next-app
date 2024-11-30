@@ -1,53 +1,83 @@
 import AutocompleteComponent from "@/component/Autocomplete";
 import Layout from "@/component/Layout";
 import { config } from "@/config/config";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  removeAddonCategory,
+  updateddonCategory,
+} from "@/store/slices/addonCategoriesSlice";
 import { appData, fetchData } from "@/store/slices/appSlice";
-import { Box, Button, TextField } from "@mui/material";
-import { Menus } from "@prisma/client";
+import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { AddonCategories, Menus } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const EditAddonCategory = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const { menus, menusAddonCategories, addonCategories } =
     useAppSelector(appData);
   const addonCategoryId = router.query.id as string;
-  const [menu, setMenu] = useState<Menus[]>();
+  const addonCategoryData = addonCategories.find(
+    (item) => item.id === Number(addonCategoryId)
+  ) as AddonCategories;
   const [addonCategory, setAddonCategory] = useState({
     name: "",
     menuIds: [] as Number[],
     addonCategoryId: Number(addonCategoryId),
   });
+  const [open, setOpen] = useState(false);
 
   const defaultAddonCategoryName = addonCategories
     .filter((item) => item.id === Number(addonCategoryId))
     .map((item) => item.name);
 
-  useEffect(() => {
-    if (menus.length) {
-      const menuIds = menusAddonCategories
-        .filter((item) => item.addonCategoryId === Number(addonCategoryId))
-        .map((item) => item.menuId);
-      const validMenus = menus.filter((item) => menuIds.includes(item.id));
-      setMenu(validMenus);
-    }
-  }, [menus]);
+  const menuIds = menusAddonCategories
+    .filter(
+      (item) =>
+        item.addonCategoryId === Number(addonCategoryId) &&
+        item.isArchived === false
+    )
+    .map((item) => item.menuId);
+  const defaultMenus = menus.filter((item) => menuIds.includes(item.id));
 
-  const updateAddonCategory = async () => {
+  const hundleUpdateAddonCategory = async () => {
     if (!addonCategory.name) return alert("Addon Category Name required");
-    await fetch(`${config.apiBaseUrl}/addon-categories`, {
+    const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer `,
       },
-      body: JSON.stringify(addonCategory),
+      body: JSON.stringify({
+        ...addonCategory,
+        addonCategoryId: Number(addonCategoryId),
+      }),
     });
-    fetchData();
+    const responseData = await response.json();
+    dispatch(updateddonCategory(responseData));
+    dispatch(fetchMenusAddonCategories(addonCategory.menuIds));
   };
 
-  if (!menu?.length) return null;
+  const handleDeleteAddonCategory = async () => {
+    const response = await fetch(
+      `${config.apiBaseUrl}/addonCategories?id=${addonCategoryId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    dispatch(removeAddonCategory(addonCategoryData));
+    setOpen(false);
+    response.ok && router.push("/backoffice/addonCategories");
+  };
 
   return (
     <Layout title="Edit Addon Category">
@@ -63,7 +93,7 @@ const EditAddonCategory = () => {
         />
         <AutocompleteComponent
           options={menus}
-          defaultValue={menu}
+          defaultValue={defaultMenus}
           label="menus"
           onChange={(options) =>
             setAddonCategory({
@@ -72,11 +102,39 @@ const EditAddonCategory = () => {
             })
           }
         />
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <Button variant="contained" onClick={updateAddonCategory}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Button variant="contained" onClick={hundleUpdateAddonCategory}>
             Update
           </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => setOpen(true)}
+          >
+            Delete
+          </Button>
         </Box>
+        <Dialog open={open}>
+          <DialogContent>
+            <Typography variant="h6">
+              Are you sure to delete this addon category?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleDeleteAddonCategory();
+              }}
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Layout>
   );
