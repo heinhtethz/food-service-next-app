@@ -14,12 +14,14 @@ import {
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData, fetchData } from "@/store/slices/appSlice";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
 import AutocompleteComponent from "@/component/Autocomplete";
 import Link from "next/link";
+import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
+import { addAddonCategory } from "@/store/slices/addonCategoriesSlice";
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
   width: 120,
@@ -30,6 +32,7 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
 }));
 
 const AddonCategories = () => {
+  const dispatch = useAppDispatch();
   const {
     menus,
     menusMenuCategoriesLocations,
@@ -55,7 +58,7 @@ const AddonCategories = () => {
     menusMenuCategoriesLocations,
     menus
   ).map((item) => ({ id: item.id, name: item.name }));
-
+  const validMenuIds = validMenusByLocation.map((item) => item.id) as number[];
   const defaultMenu = validMenusByLocation[0];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,17 +66,16 @@ const AddonCategories = () => {
   };
 
   const createAddonCategory = async () => {
-    await fetch(`${config.apiBaseUrl}/addon-categories`, {
+    const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer`,
       },
       body: JSON.stringify(addonCategory),
     });
-
-    fetchData();
-
+    const responseData = await response.json();
+    dispatch(addAddonCategory(responseData));
+    dispatch(fetchMenusAddonCategories(validMenuIds));
     setOpen(false);
   };
   return (
@@ -149,10 +151,9 @@ const AddonCategories = () => {
                 options={validMenusByLocation}
                 defaultValue={[defaultMenu]}
                 onChange={(options) => {
-                  const validMenuIds = options.map((item) => item.id as number);
                   setAddonCategory({
                     ...addonCategory,
-                    menuIds: validMenuIds,
+                    menuIds: options.map((item) => item.id as number),
                   });
                 }}
               />
