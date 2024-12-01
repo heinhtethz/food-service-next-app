@@ -1,59 +1,72 @@
-import { Box, Button, TextField } from "@mui/material";
-
-import { useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { useAppSelector } from "@/store/hooks";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData, fetchData } from "@/store/slices/appSlice";
-import { AddonCategories } from "@prisma/client";
+import { AddonCategories, Addons } from "@prisma/client";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
 import AutocompleteComponent from "@/component/Autocomplete";
 import { useRouter } from "next/router";
+import SingleValueAutocomplete from "@/component/SingleValueAutocomplete";
+import { addonCategoryByLocationId } from "@/utils";
+import { removeAddon, updateAddon } from "@/store/slices/addonsSlice";
+import { apiBaseUrl } from "next-auth/client/_utils";
 
 const EditAddon = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
+  const { addons, addonCategories } = useAppSelector(appData);
   const addonId = router.query.id as string;
   const currentAddonId = Number(addonId);
-  const { addons, addonCategories } = useAppSelector(appData);
-  const [addonCategory, setAddonCategory] = useState<AddonCategories[]>();
-  const [updateAddon, setUpdateAddon] = useState({
+  const addon = addons.find((item) => item.id === currentAddonId) as Addons;
+  const [updateAddonData, setUpdateAddonData] = useState({
     name: "",
     price: 0,
-    addon_categories_id: [] as number[],
-    addonId: currentAddonId,
+    addonCategoryId: [] as number[],
   });
+  const [open, setOpen] = useState(false);
 
   const defaultAddon = addons.filter((item) => item.id === currentAddonId);
   const defaultAddonName = defaultAddon.map((item) => item.name);
   const defaultAddonPrice = defaultAddon.map((item) => item.price);
 
-  const updateAddonData = async () => {
-    if (!updateAddon.name || !updateAddon.price)
+  const defaultAddonCategoryId = defaultAddon.map(
+    (item) => item.addonCategoryId
+  );
+  const defaultAddonCategory = addonCategories
+    .map((item) => ({ id: item.id, name: item.name }))
+    .find((item) => defaultAddonCategoryId.includes(item.id));
+
+  const handleUpdateAddon = async () => {
+    if (!updateAddonData.name || !updateAddonData.price)
       return alert("Name or price is required");
-    await fetch(`${config.apiBaseUrl}/addons`, {
+    const response = await fetch(`${config.apiBaseUrl}/addons`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer `,
       },
-      body: JSON.stringify(updateAddon),
+      body: JSON.stringify({ ...updateAddonData, addonId: currentAddonId }),
     });
-    fetchData();
+    const responseData = await response.json();
+    dispatch(updateAddon(responseData));
   };
 
-  useEffect(() => {
-    if (addonCategories.length) {
-      const validAddonCategoryId = defaultAddon.map(
-        (item) => item.addonCategoryId
-      );
-      const validAddonCategory = addonCategories.filter((item) =>
-        validAddonCategoryId.includes(item.id)
-      );
-      setAddonCategory(validAddonCategory);
-    }
-  }, [addonCategories]);
+  const handleDeleteAddon = async () => {
+    await fetch(`${config.apiBaseUrl}/addons?id=${addonId}`, {
+      method: "DELETE",
+    });
+    dispatch(removeAddon(addon));
+    router.push("/backoffice/addons");
+  };
 
-  if (!addonCategory?.length) return null;
   return (
     <Layout title="Edit Addon">
       <Box
@@ -69,7 +82,7 @@ const EditAddon = () => {
           sx={{ mb: 2 }}
           defaultValue={defaultAddonName}
           onChange={(evt) =>
-            setUpdateAddon({ ...updateAddon, name: evt.target.value })
+            setUpdateAddonData({ ...updateAddonData, name: evt.target.value })
           }
           fullWidth
         />
@@ -79,26 +92,60 @@ const EditAddon = () => {
           variant="outlined"
           defaultValue={defaultAddonPrice}
           onChange={(evt) =>
-            setUpdateAddon({ ...updateAddon, price: Number(evt.target.value) })
+            setUpdateAddonData({
+              ...updateAddonData,
+              price: Number(evt.target.value),
+            })
           }
           fullWidth
         />
-        <AutocompleteComponent
-          defaultValue={addonCategory}
-          options={addonCategories}
-          label="Addon Category"
-          onChange={(option) =>
-            setUpdateAddon({
-              ...updateAddon,
-              addon_categories_id: option.map((item) => item.id),
-            })
-          }
-        />
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <Button variant="contained" onClick={updateAddonData}>
+        <Box sx={{ mt: 2 }}>
+          <SingleValueAutocomplete
+            defaultValue={defaultAddonCategory}
+            options={addonCategories}
+            label="Addon Category"
+            onChange={(option) =>
+              setUpdateAddonData({
+                ...updateAddonData,
+                addonCategoryId: [option?.id] as number[],
+              })
+            }
+          />
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Button variant="contained" onClick={handleUpdateAddon}>
             UPDATE
           </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => setOpen(true)}
+          >
+            Delete
+          </Button>
         </Box>
+        <Dialog open={open}>
+          <DialogContent>
+            <Typography variant="h6">
+              Are you sure to delete this addon?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleDeleteAddon();
+              }}
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Layout>
   );
