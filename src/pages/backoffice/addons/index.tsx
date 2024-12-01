@@ -36,9 +36,6 @@ const Addons = () => {
     addons
   );
 
-  // if (!validAddons.length) {
-  //   return null;
-  // }
   return (
     <Layout title="Addons">
       <Box sx={{ mx: 2 }}>
