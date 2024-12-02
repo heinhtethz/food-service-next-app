@@ -13,31 +13,37 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useContext, useState } from "react";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData, fetchData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
+import Link from "next/link";
+import { addTable } from "@/store/slices/tablesSlice";
 
 const Tables = () => {
   const { tables } = useAppSelector(appData);
   const selectedLocationId = getSelectedLocationId();
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
-  const [newTable, setNewTable] = useState("");
+  const [newTable, setNewTable] = useState({ name: "" });
   const validTables = tables.filter(
     (item) => item.locationId === Number(selectedLocationId)
   );
 
   const createNewTable = async () => {
-    await fetch(`${config.apiBaseUrl}/tables`, {
+    const response = await fetch(`${config.apiBaseUrl}/tables`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: newTable, locationId: selectedLocationId }),
+      body: JSON.stringify({
+        ...newTable,
+        locationId: Number(selectedLocationId),
+      }),
     });
-    fetchData();
+    const responseData = await response.json();
+    dispatch(addTable(responseData));
     setOpen(false);
   };
 
@@ -59,29 +65,32 @@ const Tables = () => {
           {validTables.length ? (
             validTables.map((validTable) => {
               return (
-                <Card
+                <Link
+                  href={`/backoffice/tables/${validTable.id}`}
                   key={validTable.name}
-                  sx={{ width: 250, mr: 2, borderRadius: 2 }}
+                  style={{ textDecoration: "none" }}
                 >
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image="https://cdnimg.webstaurantstore.com/uploads/seo_category/2019/5/table-dining-sets.jpg"
-                      alt="green iguana"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {validTable.name}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="inherit"
-                        component="div"
-                      ></Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
+                  <Card sx={{ width: 250, mr: 2, borderRadius: 2 }}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image="https://cdnimg.webstaurantstore.com/uploads/seo_category/2019/5/table-dining-sets.jpg"
+                        alt="green iguana"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {validTable.name}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="inherit"
+                          component="div"
+                        ></Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Link>
               );
             })
           ) : (
@@ -98,7 +107,7 @@ const Tables = () => {
                 placeholder="Table name"
                 fullWidth
                 onChange={(evt) => {
-                  setNewTable(evt.target.value);
+                  setNewTable({ name: evt.target.value });
                 }}
               />
               <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
