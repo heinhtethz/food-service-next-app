@@ -1,88 +1,82 @@
-import React, { useContext, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
-import { appData, fetchData } from "@/store/slices/appSlice";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { appData } from "@/store/slices/appSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
+import { Locations } from "@prisma/client";
+import AddIcon from "@mui/icons-material/Add";
+import {
+  addLocation,
+  removeLocation,
+  updateLocation,
+} from "@/store/slices/locationsSlice";
 
-const Locations = () => {
+const Location = () => {
   const { locations, company } = useAppSelector(appData);
-  const [createData, setCreateData] = useState({
-    name: "",
-    address: "",
-    companyId: company?.id,
-  });
-  const [data, setData] = useState({
-    id: 0,
-    name: "",
-    address: "",
-    companyId: company?.id,
-  });
+  const dispatch = useAppDispatch();
+  const [newLocation, setNewLocation] = useState<Partial<Locations>>();
+  const [editLocation, setEditLocation] = useState<Partial<Locations>>();
+  const [open, setOpen] = useState(false);
 
-  const createLocation = async () => {
+  const handleCreateLocation = async () => {
     const response = await fetch(`${config.apiBaseUrl}/locations`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(createData),
+      body: JSON.stringify(newLocation),
     });
-    fetchData();
+    const responseData = await response.json();
+    dispatch(addLocation(responseData));
+    setOpen(false);
   };
 
-  const updateLocation = async () => {
+  const handleUpdateLocation = async () => {
     const response = await fetch(`${config.apiBaseUrl}/locations`, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(editLocation),
     });
-    fetchData();
-    console.log(data);
+    const responseData = await response.json();
+    dispatch(updateLocation(responseData));
+  };
+
+  const handleDeleteLocation = async (prop: number) => {
+    const response = await fetch(`${config.apiBaseUrl}/locations`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: prop }),
+    });
+    const responseData = await response.json();
+    dispatch(removeLocation(responseData));
   };
 
   return (
     <Layout title="Locations">
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          mt: 5,
-        }}
-      >
-        <Box sx={{ ml: 4.5 }}>
-          <TextField
-            sx={{ mr: 5 }}
-            label="Name"
-            variant="outlined"
-            onChange={(evt) => {
-              setCreateData({
-                ...createData,
-                name: evt.target.value,
-                companyId: company?.id,
-              });
-            }}
-          />
-          <TextField
-            sx={{ mr: 5 }}
-            label="Address"
-            variant="outlined"
-            onChange={(evt) => {
-              setCreateData({
-                ...createData,
-                address: evt.target.value,
-                companyId: company?.id,
-              });
-            }}
-          />
-          <Button variant="contained" sx={{ mt: 1 }} onClick={createLocation}>
-            Create
-          </Button>
-        </Box>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mx: 2, mt: 2 }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon></AddIcon>}
+          onClick={() => setOpen(true)}
+        >
+          Create New Location
+        </Button>
+      </Box>
+      <Box sx={{ width: 800, margin: "0 auto" }}>
         <Box>
           {locations.map((location, index) => {
             return (
@@ -90,50 +84,62 @@ const Locations = () => {
                 key={location.name}
                 sx={{
                   display: "flex",
-                  justifyContent: "center",
-                  mt: 5,
+                  justifyContent: "space-evenly",
+                  mt: 3,
                 }}
               >
-                <Typography variant="h5" sx={{ mr: 2, mt: 1 }}>
-                  {index + 1}.
-                </Typography>
-                <TextField
-                  sx={{ mr: 5 }}
-                  label="Name"
-                  variant="outlined"
-                  defaultValue={location.name}
-                  onChange={(evt) => {
-                    setData({
-                      ...data,
-                      //@ts-ignore
-                      id: location.id,
-                      name: evt.target.value,
-                      companyId: company?.id,
-                    });
+                <Typography variant="h5">{index + 1}.</Typography>
+                <Box
+                  sx={{
+                    width: "70%",
+                    display: "flex",
+                    justifyContent: "space-around",
                   }}
-                />
-                <TextField
-                  sx={{ mr: 5 }}
-                  label="Address"
-                  variant="outlined"
-                  defaultValue={location.address}
-                  onChange={(evt) => {
-                    setData({
-                      ...data,
-                      //@ts-ignore
-                      id: location.id,
-                      address: evt.target.value,
-                      companyId: company?.id,
-                    });
-                  }}
-                />
+                >
+                  <TextField
+                    label="Name"
+                    variant="outlined"
+                    defaultValue={location.name}
+                    onChange={(evt) => {
+                      setEditLocation({
+                        ...editLocation,
+                        id: location.id,
+                        name: evt.target.value,
+                        companyId: company?.id,
+                      });
+                    }}
+                  />
+                  <TextField
+                    label="Address"
+                    variant="outlined"
+                    defaultValue={location.address}
+                    onChange={(evt) => {
+                      setEditLocation({
+                        ...editLocation,
+                        id: location.id,
+                        address: evt.target.value,
+                        companyId: company?.id,
+                      });
+                    }}
+                  />
+                </Box>
                 <Box>
                   <Button
                     variant="contained"
                     sx={{ mt: 1 }}
-                    onClick={updateLocation}
+                    onClick={handleUpdateLocation}
                   >
                     Update
+                  </Button>
+                </Box>
+                <Box>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ mt: 1, ml: 1 }}
+                    onClick={() => handleDeleteLocation(location.id)}
+                  >
+                    Delete
                   </Button>
                 </Box>
               </Box>
@@ -141,8 +147,52 @@ const Locations = () => {
           })}
         </Box>
       </Box>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle sx={{ textAlign: "center" }}>
+          <Typography variant="h6" sx={{ fontFamily: "monospace" }}>
+            Create New Location
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Name"
+            variant="outlined"
+            onChange={(evt) => {
+              setNewLocation({
+                ...newLocation,
+                name: evt.target.value,
+                companyId: company?.id,
+              });
+            }}
+            sx={{ mb: 2 }}
+            fullWidth
+          />
+          <TextField
+            label="Address"
+            variant="outlined"
+            onChange={(evt) => {
+              setNewLocation({
+                ...newLocation,
+                address: evt.target.value,
+                companyId: company?.id,
+              });
+            }}
+            sx={{ mb: 2 }}
+            fullWidth
+          />
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              onClick={handleCreateLocation}
+              sx={{ mt: 1 }}
+            >
+              Create
+            </Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };
 
-export default Locations;
+export default Location;

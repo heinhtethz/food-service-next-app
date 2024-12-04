@@ -1,5 +1,5 @@
 import { Locations } from "@prisma/client";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
 interface LocationState {
@@ -19,11 +19,23 @@ const locationsSlice = createSlice({
   name: "locations",
   initialState,
   reducers: {
-    setLocations: (state, action) => {
+    setLocations: (state, action: PayloadAction<Locations[]>) => {
       state.items = action.payload;
+    },
+    addLocation: (state, action: PayloadAction<Locations>) => {
+      state.items = [...state.items, action.payload];
+    },
+    removeLocation: (state, action: PayloadAction<Locations>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
+    updateLocation: (state, action: PayloadAction<Locations>) => {
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
     },
   },
 });
 
-export const { setLocations } = locationsSlice.actions;
+export const { setLocations, addLocation, removeLocation, updateLocation } =
+  locationsSlice.actions;
 export default locationsSlice.reducer;
