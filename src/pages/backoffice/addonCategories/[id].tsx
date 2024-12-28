@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { AddonCategories, Menus } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const EditAddonCategory = () => {
   const dispatch = useAppDispatch();

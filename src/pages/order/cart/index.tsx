@@ -10,7 +10,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
 import { Addons } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
 const Review = () => {
   const { carts } = useAppSelector(appData);

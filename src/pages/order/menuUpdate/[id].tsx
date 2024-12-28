@@ -13,7 +13,7 @@ const MenuUpdate = () => {
   const router = useRouter();
   const query = router.query;
   const dispatch = useAppDispatch();
-  const { menus, addons, addonCategories, menusAddonCategories, carts } =
+  const { addons, addonCategories, menusAddonCategories, carts } =
     useAppSelector(appData);
   const cartItemId = router.query.id as string;
   const cartItem = carts.find((item) => item.id === cartItemId);

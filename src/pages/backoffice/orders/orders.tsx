@@ -13,12 +13,11 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Layout from "@/component/Layout";
-import { Fragment, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { appData, fetchData } from "@/store/slices/appSlice";
+import { Fragment, useState } from "react";
+import { useAppSelector } from "@/store/hooks";
+import { appData } from "@/store/slices/appSlice";
 import { Menus, Orderlines, Orders, OrderStatus } from "@prisma/client";
 import {
-  Autocomplete,
   FormControl,
   InputLabel,
   MenuItem,
@@ -32,7 +31,6 @@ import { updateOrderline } from "@/store/slices/orderlinesSlice";
 function Row(Props: { row: Orders }) {
   const { row } = Props;
   const { orderlines, menus, addons } = useAppSelector(appData);
-  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const orderId = row.id;
   const isPaid = row.isPaid === true ? "Yes" : "No";

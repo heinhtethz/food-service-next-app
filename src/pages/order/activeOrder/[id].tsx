@@ -1,15 +1,16 @@
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { Box, Paper, Typography } from "@mui/material";
+import { Orders } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
 const ActiveOrder = () => {
   const router = useRouter();
   const query = router.query;
   const orderId = router.query.id as string;
   const { orders } = useAppSelector(appData);
-  const order = orders.find((item) => item.id === Number(orderId));
+  const order = orders.find((item: Orders) => item.id === Number(orderId));
 
   useEffect(() => {
     if (!order) {
