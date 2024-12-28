@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import prisma, { getCartTotalPrice } from "@/utils";
-import { OrderStatus } from "@prisma/client";
+import { Menus, OrderStatus } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -104,6 +104,7 @@ export default async function handler(
             menuId: menu.id,
             orderId: newOrder.id,
             quantity: orderline.quantity,
+            ramdomMenuId: orderline.ramdomMenuId,
           },
         });
       }
