@@ -10,6 +10,9 @@ import locationsSlice from "./slices/locationsSlice";
 import tablesSlice from "./slices/tablesSlice";
 import companySlice from "./slices/companySlice";
 import menusMenuCategoriesLocationsSlice from "./slices/menusMenuCategoriesLocations";
+import cartSlice from "./slices/cartSlice";
+import orderSlice from "./slices/ordersSlice";
+import orderlinesSlice from "./slices/orderlinesSlice";
 
 // ...
 
@@ -26,6 +29,9 @@ export const store = configureStore({
     menusMenuCategoriesLocations: menusMenuCategoriesLocationsSlice,
     company: companySlice,
     tables: tablesSlice,
+    carts: cartSlice,
+    orders: orderSlice,
+    orderlines: orderlinesSlice,
   },
 });
 

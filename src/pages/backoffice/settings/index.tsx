@@ -4,7 +4,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils";
@@ -12,22 +12,10 @@ import Layout from "@/component/Layout";
 
 const Settings = () => {
   const { locations } = useAppSelector(appData);
-  const locationIdFromLocalStorage = getSelectedLocationId();
-  const [selectedLocationId, setSelectedLocationId] = useState("");
-
-  useEffect(() => {
-    if (locations.length) {
-      if (locationIdFromLocalStorage) {
-        setSelectedLocationId(locationIdFromLocalStorage);
-      } else {
-        const firstLocationId = String(locations[0].id);
-        setSelectedLocationId(firstLocationId);
-        if (typeof window !== "undefined" && window.localStorage) {
-          localStorage.setItem("selectedLocationId", firstLocationId);
-        }
-      }
-    }
-  }, [locations]);
+  const locationIdFromLocalStorage = getSelectedLocationId() as string;
+  const [selectedLocationId, setSelectedLocationId] = useState(
+    locationIdFromLocalStorage
+  );
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedLocationId(event.target.value as string);

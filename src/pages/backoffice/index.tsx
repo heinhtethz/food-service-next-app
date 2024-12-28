@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchData } from "@/store/slices/appSlice";
+import { appData, fetchData } from "@/store/slices/appSlice";
+import { getSelectedLocationId } from "@/utils";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -9,6 +10,8 @@ const BackofficeApp = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state.app);
+  const { locations } = useAppSelector(appData);
+  const locationIdFromLocalStorage = getSelectedLocationId();
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -20,7 +23,18 @@ const BackofficeApp = () => {
 
   useEffect(() => {
     dispatch(fetchData());
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (locations.length) {
+      if (!locationIdFromLocalStorage) {
+        const firstLocationId = String(locations[0].id);
+        if (typeof window !== "undefined" && window.localStorage) {
+          localStorage.setItem("selectedLocationId", firstLocationId);
+        }
+      }
+    }
+  }, [locations, locationIdFromLocalStorage]);
   return null;
 };
 

@@ -15,6 +15,8 @@ import { setCompany } from "./companySlice";
 import { setMenusAddonCategories } from "./menusAddonCategoriesSlice";
 import { setTables } from "./tablesSlice";
 import { RootState } from "..";
+import { setOrders } from "./ordersSlice";
+import { setOrderlines } from "./orderlinesSlice";
 
 interface CounterState {
   isLoading: boolean;
@@ -23,7 +25,7 @@ interface CounterState {
 
 // Define the initial state using that type
 const initialState: CounterState = {
-  isLoading: false,
+  isLoading: true,
   error: null,
 };
 
@@ -42,6 +44,8 @@ export const fetchData = createAsyncThunk(
       menusMenuCategoriesLocations,
       company,
       tables,
+      orders,
+      orderlines,
     } = await response.json();
     thunkAPI.dispatch(setMenus(menus));
     thunkAPI.dispatch(setMenuCategories(menuCategories));
@@ -54,6 +58,8 @@ export const fetchData = createAsyncThunk(
     );
     thunkAPI.dispatch(setCompany(company));
     thunkAPI.dispatch(setTables(tables));
+    thunkAPI.dispatch(setOrders(orders));
+    thunkAPI.dispatch(setOrderlines(orderlines));
     thunkAPI.dispatch(setAppLoading(false));
   }
 );
@@ -69,6 +75,7 @@ const appSlice = createSlice({
 });
 
 export const { setAppLoading } = appSlice.actions;
+export default appSlice.reducer;
 
 export const selectMenus = (state: RootState) => state.menus.items;
 export const selectMenuCategories = (state: RootState) =>
@@ -83,6 +90,9 @@ export const selectMenusMenuCategoriesLocations = (state: RootState) =>
   state.menusMenuCategoriesLocations.items;
 export const selectCompany = (state: RootState) => state.company.item;
 export const selectTables = (state: RootState) => state.tables.items;
+export const selectCarts = (state: RootState) => state.carts.items;
+export const selectOrders = (state: RootState) => state.orders.items;
+export const selectOrderlines = (state: RootState) => state.orderlines.items;
 
 export const appData = createSelector(
   [
@@ -95,6 +105,9 @@ export const appData = createSelector(
     selectMenusMenuCategoriesLocations,
     selectCompany,
     selectTables,
+    selectOrders,
+    selectOrderlines,
+    selectCarts,
   ],
   (
     menus,
@@ -105,7 +118,10 @@ export const appData = createSelector(
     menusAddonCategories,
     menusMenuCategoriesLocations,
     company,
-    tables
+    tables,
+    orders,
+    orderlines,
+    carts
   ) => {
     return {
       menus,
@@ -117,8 +133,9 @@ export const appData = createSelector(
       menusMenuCategoriesLocations,
       company,
       tables,
+      orders,
+      orderlines,
+      carts,
     };
   }
 );
-
-export default appSlice.reducer;

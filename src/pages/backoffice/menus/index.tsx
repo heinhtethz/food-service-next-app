@@ -28,7 +28,7 @@ const Menus = () => {
   return (
     <Layout title="Menus">
       <Box sx={{ mx: 2 }}>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2, mb: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", pt: 2, mb: 2 }}>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -74,7 +74,7 @@ const Menus = () => {
               );
             })
           ) : (
-            <h1>No menu not available here!</h1>
+            <h1>No available menu!</h1>
           )}
         </Box>
         <Box>

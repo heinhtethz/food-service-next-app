@@ -94,7 +94,7 @@ const Tables = () => {
               );
             })
           ) : (
-            <h1>No table not available!</h1>
+            <h1>No available table!</h1>
           )}
         </Box>
         <Dialog open={open} onClose={() => setOpen(false)}>

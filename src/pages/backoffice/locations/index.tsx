@@ -76,7 +76,7 @@ const Location = () => {
           Create New Location
         </Button>
       </Box>
-      <Box sx={{ width: 800, margin: "0 auto" }}>
+      <Box sx={{ maxWidth: 800, margin: "0 auto" }}>
         <Box>
           {locations.map((location, index) => {
             return (

@@ -134,7 +134,14 @@ const NavBar = ({ title }: Props) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ bgcolor: "white" }}>
+      <AppBar
+        position="static"
+        sx={{
+          bgcolor: "white",
+          width: "100vw",
+          position: "relative",
+        }}
+      >
         <Toolbar>
           {data ? (
             <IconButton

@@ -94,28 +94,27 @@ const AddonCategories = () => {
           sx={{
             display: "flex",
             flexWrap: "wrap",
-            "& > :not(style)": {
-              m: 1,
-              width: 128,
-              height: 128,
-            },
             gap: 3,
           }}
         >
-          {validAddonCategories.map((item) => (
-            <Link
-              href={`/backoffice/addonCategories/${item.id}`}
-              onChange={() => console.log(item.id)}
-              key={item.id}
-              style={{ textDecoration: "none" }}
-            >
-              <DemoPaper square={false} elevation={5}>
-                <Typography variant="body2" sx={{ mt: 10 }}>
-                  {item.name}
-                </Typography>
-              </DemoPaper>
-            </Link>
-          ))}
+          {validAddonCategories.length ? (
+            validAddonCategories.map((item) => (
+              <Link
+                href={`/backoffice/addonCategories/${item.id}`}
+                onChange={() => console.log(item.id)}
+                key={item.id}
+                style={{ textDecoration: "none" }}
+              >
+                <DemoPaper square={false} elevation={5}>
+                  <Typography variant="body2" sx={{ mt: 10 }}>
+                    {item.name}
+                  </Typography>
+                </DemoPaper>
+              </Link>
+            ))
+          ) : (
+            <h1>No available addon category!</h1>
+          )}
         </Box>
         <Dialog
           open={open}

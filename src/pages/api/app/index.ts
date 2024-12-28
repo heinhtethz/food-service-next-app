@@ -126,7 +126,7 @@ export default async function appHandler(
       newTableData.map((table) => prisma.tables.create({ data: table }))
     );
 
-    return res.send({
+    return res.status(200).send({
       menus: newMenus,
       menuCategories: newMenuCategories,
       addons: newAddons,
@@ -217,7 +217,7 @@ export default async function appHandler(
         id: companyId,
       },
     });
-    /* 
+
     const orders = await prisma.orders.findMany({
       where: { locationId: { in: locationIds } },
     });
@@ -225,8 +225,8 @@ export default async function appHandler(
     const orderlines = await prisma.orderlines.findMany({
       where: { orderId: { in: orderIds } },
     });
-    */
-    res.send({
+
+    return res.status(200).send({
       menus,
       menuCategories,
       addons,
@@ -236,6 +236,8 @@ export default async function appHandler(
       menusMenuCategoriesLocations,
       company,
       tables,
+      orders,
+      orderlines,
     });
   }
 }

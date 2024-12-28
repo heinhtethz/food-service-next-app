@@ -58,27 +58,26 @@ const Addons = () => {
           sx={{
             display: "flex",
             flexWrap: "wrap",
-            "& > :not(style)": {
-              m: 1,
-              width: 128,
-              height: 128,
-            },
             gap: 3,
           }}
         >
-          {validAddons.map((item) => (
-            <Link
-              href={`/backoffice/addons/${item.id}`}
-              key={item.id}
-              style={{ textDecoration: "none" }}
-            >
-              <DemoPaper square={false} elevation={5}>
-                <Typography variant="body2" sx={{ mt: 10 }}>
-                  {item.name}
-                </Typography>
-              </DemoPaper>
-            </Link>
-          ))}
+          {validAddons.length ? (
+            validAddons.map((item) => (
+              <Link
+                href={`/backoffice/addons/${item.id}`}
+                key={item.id}
+                style={{ textDecoration: "none" }}
+              >
+                <DemoPaper square={false} elevation={5}>
+                  <Typography variant="body2" sx={{ mt: 10 }}>
+                    {item.name}
+                  </Typography>
+                </DemoPaper>
+              </Link>
+            ))
+          ) : (
+            <h1>No available addon!</h1>
+          )}
         </Box>
         <CreateNewAddons open={open} setOpen={setOpen} />
       </Box>

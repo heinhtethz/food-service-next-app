@@ -56,6 +56,7 @@ model Addons {
   isArchived      Boolean         @default(false)
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  orderlines      Orderlines[]
 }
 
 model Locations {
@@ -69,6 +70,7 @@ model Locations {
   updatedAt                    DateTime                       @updatedAt
   ManusMenuCategoriesLocations MenusMenuCategoriesLocations[]
   Tables                       Tables[]
+  orders                       Orders[]
 }
 
 model MenuCategories {
@@ -91,6 +93,7 @@ model Menus {
   updatedAt                    DateTime                       @updatedAt
   MenusAddonCategories         MenusAddonCategories[]
   ManusMenuCategoriesLocations MenusMenuCategoriesLocations[]
+  orderlines                   Orderlines[]
 }
 
 model MenusAddonCategories {
@@ -126,4 +129,45 @@ model Tables {
   isArchived Boolean   @default(false)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+  orders     Orders[]
+}
+
+model Orders {
+  id         Int          @id @default(autoincrement())
+  locationId Int
+  tableId    Int
+  isPaid     Boolean      @default(false)
+  price      Int?         @default(0)
+  locations  Locations    @relation(fields: [locationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tables     Tables       @relation(fields: [tableId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  orderlines Orderlines[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now()) @updatedAt
+}
+
+model Orderlines {
+  id           Int         @id @default(autoincrement())
+  orderId      Int
+  menuId       Int
+  addonId      Int?
+  quantity     Int         @default(1)
+  ramdomMenuId String
+  orderStatus  OrderStatus @default(PENDING)
+  orders       Orders      @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  menus        Menus       @relation(fields: [menuId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  addons       Addons?     @relation(fields: [addonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @default(now()) @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  COMPLETE
+  REJECTED
+}
+
+enum Role {
+  user
+  admin
 }

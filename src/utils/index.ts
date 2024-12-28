@@ -1,3 +1,4 @@
+import { CartItem } from "@/typings";
 import {
   AddonCategories,
   Addons,
@@ -5,10 +6,12 @@ import {
   Menus,
   MenusAddonCategories,
   MenusMenuCategoriesLocations,
+  Orderlines,
   PrismaClient,
 } from "@prisma/client";
 
 const prisma = new PrismaClient();
+export default prisma;
 
 export const getSelectedLocationId = () => {
   if (typeof window !== "undefined" && window.localStorage) {
@@ -40,6 +43,55 @@ export const menuByLocationId = (
   return menus.filter((item) => validMenuIds.includes(item.id as number));
 };
 
+export const menusByMenuCategoryId = (
+  menusMenuCategoriesLocations: MenusMenuCategoriesLocations[],
+  menus: Menus[],
+  menuCategoryId: Number,
+  selectedLocationId: Number
+) => {
+  const validMenus = menusMenuCategoriesLocations
+    .filter(
+      (item) =>
+        item.menuCategoryId === menuCategoryId &&
+        item.locationId === selectedLocationId &&
+        item.isArchived === false
+    )
+    .map((item) => item.menuId);
+  return menus.filter((item) => validMenus.includes(item.id));
+};
+
+export const orderlinesByRamdomMenuId = (orderlines: Orderlines[]) => {
+  let orderline = [] as Orderlines[];
+  orderlines.forEach((item) => {
+    if (!orderline.length) {
+      orderline = [item];
+    } else {
+      const isAlredy = orderline.find(
+        (elem) => elem.ramdomMenuId === item.ramdomMenuId
+      );
+      if (isAlredy) {
+        return;
+      } else {
+        orderline = [...orderline, item];
+      }
+    }
+  });
+  return orderline;
+};
+
+export const getNumberOfMenusByOrderId = (
+  orderlines: Orderlines[],
+  orderId: number
+) => {
+  const orderline = orderlinesByRamdomMenuId(orderlines);
+  const validOrderline = orderline.filter((item) => item.orderId === orderId);
+
+  const quantity = validOrderline
+    .map((item) => item.quantity)
+    .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  return quantity;
+};
+
 export const addonCategoryByLocationId = (
   addonCategories: AddonCategories[],
   menus: Menus[],
@@ -55,6 +107,19 @@ export const addonCategoryByLocationId = (
     .map((item) => item.addonCategoryId);
   return addonCategories.filter((item) =>
     validAddonCategoryId.includes(item.id as number)
+  );
+};
+
+export const addonCategoriesByMenuId = (
+  addonCategories: AddonCategories[],
+  menusAddonCategories: MenusAddonCategories[],
+  menuId: Number
+) => {
+  const validAddonCategoryId = menusAddonCategories
+    .filter((item) => item.menuId === menuId)
+    .map((item) => item.addonCategoryId);
+  return addonCategories.filter((item) =>
+    validAddonCategoryId.includes(item.id)
   );
 };
 
@@ -85,4 +150,14 @@ export const menusMenuCategoriesLocationsByLocationId = (
   );
 };
 
-export default prisma;
+export const generateRandomId = () =>
+  (Math.random() + 1).toString(36).substring(7);
+
+export const getCartTotalPrice = (cart: CartItem[]) => {
+  const totalPrice = cart.reduce((acc, cur) => {
+    const menuPrice = cur.menu.price;
+    const totalAddonPrice = cur.addons.reduce((a, c) => (a += c.price), 0);
+    return (acc += (menuPrice + totalAddonPrice) * cur.quantity);
+  }, 0);
+  return totalPrice;
+};

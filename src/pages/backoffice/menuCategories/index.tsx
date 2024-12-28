@@ -62,14 +62,6 @@ const MenuCategories = () => {
     setOpen(false);
   };
 
-  if (!validMenuCategories.length) {
-    return (
-      <Layout title="Menu Categories">
-        <Box sx={{ m: 5 }}>Error: 404 menu category not available!</Box>
-      </Layout>
-    );
-  }
-
   return (
     <Layout title="Menu Categories">
       <Box sx={{ mx: 2, mt: 2 }}>
@@ -91,23 +83,27 @@ const MenuCategories = () => {
             mt: 2,
           }}
         >
-          {validMenuCategories.map((item) => (
-            <Link
-              href={`/backoffice/menuCategories/${item.id}`}
-              key={item.id}
-              style={{ textDecoration: "none" }}
-            >
-              <DemoPaper
-                square={false}
-                elevation={5}
-                sx={{ display: "flex", justifyContent: "center" }}
+          {validMenuCategories.length ? (
+            validMenuCategories.map((item) => (
+              <Link
+                href={`/backoffice/menuCategories/${item.id}`}
+                key={item.id}
+                style={{ textDecoration: "none" }}
               >
-                <Typography variant="body2" sx={{ mt: 10 }}>
-                  {item.name}
-                </Typography>
-              </DemoPaper>
-            </Link>
-          ))}
+                <DemoPaper
+                  square={false}
+                  elevation={5}
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Typography variant="body2" sx={{ mt: 10 }}>
+                    {item.name}
+                  </Typography>
+                </DemoPaper>
+              </Link>
+            ))
+          ) : (
+            <h1>No available menu category!</h1>
+          )}
         </Box>
 
         <Dialog open={open} onClose={() => setOpen(false)}>
