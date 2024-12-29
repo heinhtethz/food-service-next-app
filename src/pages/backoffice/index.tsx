@@ -6,20 +6,22 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const BackofficeApp = () => {
-  const { status } = useSession();
+  const { status, data } = useSession();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { locations } = useAppSelector(appData);
   const { isLoading } = useAppSelector((state) => state.app);
   const locationIdFromLocalStorage = getSelectedLocationId();
   console.log(status);
+  console.log(data);
+
   useEffect(() => {
-    if (status === "authenticated") {
+    if (data && status === "authenticated") {
       !isLoading && router.push("/backoffice/orders");
     } else {
       router.push("/auth/signin");
     }
-  }, [router, status, isLoading]);
+  }, [router, status, isLoading, data]);
 
   useEffect(() => {
     if (locations.length) {
@@ -31,10 +33,6 @@ const BackofficeApp = () => {
       }
     }
   }, [locations, locationIdFromLocalStorage]);
-
-  useEffect(() => {
-    dispatch(fetchData());
-  }, [dispatch]);
 
   return null;
 };

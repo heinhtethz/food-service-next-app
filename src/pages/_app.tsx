@@ -9,9 +9,9 @@ import { getSelectedLocationId } from "@/utils";
 import { useAppSelector } from "@/store/hooks";
 
 export default function App({ Component, pageProps }: AppProps) {
-  // useEffect(() => {
-  //   store.dispatch(fetchData());
-  // }, []);
+  useEffect(() => {
+    store.dispatch(fetchData());
+  }, []);
 
   return (
     <SessionProvider>
