@@ -23,7 +23,7 @@ const BackofficeApp = () => {
 
   useEffect(() => {
     dispatch(fetchData());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (locations.length) {
