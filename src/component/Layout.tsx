@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import NavBar from "./NavBar";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchData } from "@/store/slices/appSlice";
 
 interface Props {
   title?: string;
@@ -9,9 +10,16 @@ interface Props {
 }
 
 const Layout = ({ title, children }: Props) => {
-  const { isLoading } = useAppSelector((state) => state.app);
-  if (isLoading) return null;
+  const { isLoading, init } = useAppSelector((state) => state.app);
+  const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (!init) {
+      dispatch(fetchData());
+    }
+  }, [dispatch, init]);
+
+  if (isLoading) return null;
   return (
     <Box>
       <NavBar title={title} />

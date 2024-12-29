@@ -20,12 +20,14 @@ import { setOrderlines } from "./orderlinesSlice";
 
 interface CounterState {
   isLoading: boolean;
+  init: boolean;
   error: Error | null;
 }
 
 // Define the initial state using that type
 const initialState: CounterState = {
   isLoading: true,
+  init: false,
   error: null,
 };
 
@@ -61,6 +63,7 @@ export const fetchData = createAsyncThunk(
     thunkAPI.dispatch(setOrders(orders));
     thunkAPI.dispatch(setOrderlines(orderlines));
     thunkAPI.dispatch(setAppLoading(false));
+    thunkAPI.dispatch(setInit(true));
   }
 );
 
@@ -71,10 +74,13 @@ const appSlice = createSlice({
     setAppLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
+    setInit: (state, action: PayloadAction<boolean>) => {
+      state.init = action.payload;
+    },
   },
 });
 
-export const { setAppLoading } = appSlice.actions;
+export const { setAppLoading, setInit } = appSlice.actions;
 export default appSlice.reducer;
 
 export const selectMenus = (state: RootState) => state.menus.items;

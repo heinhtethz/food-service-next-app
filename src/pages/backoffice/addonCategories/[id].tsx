@@ -6,7 +6,7 @@ import {
   removeAddonCategory,
   updateddonCategory,
 } from "@/store/slices/addonCategoriesSlice";
-import { appData, fetchData } from "@/store/slices/appSlice";
+import { appData } from "@/store/slices/appSlice";
 import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 import {
   Box,

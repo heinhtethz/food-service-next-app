@@ -9,21 +9,16 @@ const BackofficeApp = () => {
   const { status } = useSession();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector((state) => state.app);
   const { locations } = useAppSelector(appData);
   const locationIdFromLocalStorage = getSelectedLocationId();
 
   useEffect(() => {
     if (status === "authenticated") {
-      !isLoading && router.push("/backoffice/orders");
+      router.push("/backoffice/orders");
     } else {
       router.push("/auth/signin");
     }
-  }, [router, status, isLoading]);
-
-  useEffect(() => {
-    dispatch(fetchData());
-  }, []);
+  }, [router, status]);
 
   useEffect(() => {
     if (locations.length) {
@@ -35,6 +30,11 @@ const BackofficeApp = () => {
       }
     }
   }, [locations, locationIdFromLocalStorage]);
+
+  useEffect(() => {
+    dispatch(fetchData());
+  }, [dispatch]);
+
   return null;
 };
 
