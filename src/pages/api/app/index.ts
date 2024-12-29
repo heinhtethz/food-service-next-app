@@ -8,7 +8,7 @@ export default async function appHandler(
   res: NextApiResponse
 ) {
   const session = await getSession({ req });
-  if (!session) return res.status(401).send("Unauthorized");
+  if (!session) return res.status(401).send("User is unauthorized");
   const user = session.user;
   const email = user?.email as string;
   const name = user?.name as string;
