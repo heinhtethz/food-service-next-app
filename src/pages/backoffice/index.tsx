@@ -10,15 +10,16 @@ const BackofficeApp = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { locations } = useAppSelector(appData);
+  const { isLoading } = useAppSelector((state) => state.app);
   const locationIdFromLocalStorage = getSelectedLocationId();
-
+  console.log(status);
   useEffect(() => {
     if (status === "authenticated") {
-      router.push("/backoffice/orders");
+      !isLoading && router.push("/backoffice/orders");
     } else {
       router.push("/auth/signin");
     }
-  }, [router, status]);
+  }, [router, status, isLoading]);
 
   useEffect(() => {
     if (locations.length) {
