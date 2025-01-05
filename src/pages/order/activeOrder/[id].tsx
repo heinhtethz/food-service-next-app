@@ -4,35 +4,40 @@ import { Box, Paper, Typography } from "@mui/material";
 import { Orders } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import OrderAppLayout from "@/component/OrderLayout";
 
 const ActiveOrder = () => {
   const router = useRouter();
   const query = router.query;
-  const orderId = router.query.id as string;
   const { orders } = useAppSelector(appData);
-  const order = orders.find((item: Orders) => item.id === Number(orderId));
+  const orderId = Number(query.id);
+  const order = orders.find((item) => item.id === orderId) as Orders;
 
   useEffect(() => {
     if (!order) {
       router.push({ pathname: "/order", query });
     }
-  }, [order, query, router]);
-  if (!order) return null;
+  }, [order, router, query]);
+
+  if (!order) return <CircularProgress />;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        mt: 4,
-      }}
-    >
-      <Paper sx={{ width: 500 }}>
-        <Typography variant="h5">orderId: {order.id}</Typography>
-        <Typography variant="h5">price: {order.price}</Typography>
-        <Typography variant="h5">tableId: {order.tableId}</Typography>
-      </Paper>
-    </Box>
+    <OrderAppLayout>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          mt: 4,
+        }}
+      >
+        <Paper sx={{ width: "500px" }}>
+          <Typography variant="h5">orderId: {order.id}</Typography>
+          <Typography variant="h5">price: {order.price}</Typography>
+          <Typography variant="h5">tableId: {order.tableId}</Typography>
+        </Paper>
+      </Box>
+    </OrderAppLayout>
   );
 };
 

@@ -100,7 +100,13 @@ const CreateNewAddons = ({ setOpen, open }: Props) => {
               }}
             />
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              mt: 2,
+            }}
+          >
             <Button variant="contained" onClick={createNewAddon}>
               Create
             </Button>

@@ -1,13 +1,15 @@
 import AddonCategoryComponent from "@/component/AddonCategoryComponent";
+import OrderAppLayout from "@/component/OrderLayout";
 import QuantitySelector from "@/component/QuantitySelector";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData, selectCarts } from "@/store/slices/appSlice";
 import { addCart, setCarts, updateCart } from "@/store/slices/cartSlice";
 import { addonCategoriesByMenuId, generateRandomId } from "@/utils";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, CardMedia, Typography } from "@mui/material";
 import { AddonCategories, Addons } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const Menu = () => {
   const router = useRouter();
@@ -111,37 +113,47 @@ const Menu = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        p: 4,
-      }}
-    >
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        {menu?.name}
-      </Typography>
-      <AddonCategoryComponent
-        validAddonCategories={validAddonCategories}
-        validAddons={validAddons}
-        selectedAddons={selectedAddons}
-        onChange={(checked, item) => handleAddonSelect(checked, item)}
-      />
-      <QuantitySelector
-        value={quantity}
-        onDecrease={handleQuantityDecrease}
-        onIncrease={handleQuantityIncrease}
-      />
-      <Button
-        variant="contained"
-        disabled={isDisabled}
-        onClick={addToCart}
-        sx={{ mt: 3, width: "fit-content" }}
+    <OrderAppLayout>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          p: 4,
+        }}
       >
-        Add to cart
-      </Button>
-    </Box>
+        {menu?.assetUrl && (
+          <CardMedia
+            component="img"
+            image={menu.assetUrl}
+            alt="MenuImage"
+            sx={{ maxWidth: "375px", borderRadius: 5 }}
+          />
+        )}
+        <Typography variant="h4" sx={{ mb: 2 }}>
+          {menu?.name}
+        </Typography>
+        <AddonCategoryComponent
+          validAddonCategories={validAddonCategories}
+          validAddons={validAddons}
+          selectedAddons={selectedAddons}
+          onChange={(checked, item) => handleAddonSelect(checked, item)}
+        />
+        <QuantitySelector
+          value={quantity}
+          onDecrease={handleQuantityDecrease}
+          onIncrease={handleQuantityIncrease}
+        />
+        <Button
+          variant="contained"
+          disabled={isDisabled}
+          onClick={addToCart}
+          sx={{ mt: 3, width: "fit-content" }}
+        >
+          Add to cart
+        </Button>
+      </Box>
+    </OrderAppLayout>
   );
 };
 export default Menu;

@@ -1,21 +1,25 @@
 import MenuCard from "@/component/MenuCard";
-import ViewCartBar from "@/component/viewCartBar";
+import OrderAppLayout from "@/component/OrderLayout";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { menusByMenuCategoryId } from "@/utils";
+import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import { MenuCategories } from "@prisma/client";
+import { Locations, MenuCategories } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const OrderApp = () => {
   const router = useRouter();
   const query = router.query;
-  const selectedLocationId = Number(query.locationId);
   const { menuCategories, menus, locations, menusMenuCategoriesLocations } =
     useAppSelector(appData);
+  const currentLocation = locations.find(
+    (item) => item.id === Number(query.locationId)
+  ) as Locations;
+  const currentAddress = currentLocation?.address;
   const [value, setValue] = useState(0);
   const [selectedMenuCategory, setSelectedMenuCategory] =
     useState<MenuCategories>();
@@ -27,14 +31,14 @@ const OrderApp = () => {
   }, [menuCategories]);
 
   const renderMenus = () => {
-    const isValid = selectedLocationId && selectedMenuCategory;
+    const isValid = currentLocation.id && selectedMenuCategory;
     if (!isValid) return;
     const menuCategoryId = selectedMenuCategory.id as number;
     const validMenus = menusByMenuCategoryId(
       menusMenuCategoriesLocations,
       menus,
       menuCategoryId,
-      selectedLocationId
+      currentLocation.id
     );
 
     return validMenus.map((item) => {
@@ -42,32 +46,41 @@ const OrderApp = () => {
       return <MenuCard key={item.id} menu={item} href={href} />;
     });
   };
-
-  if (!selectedMenuCategory) return null;
+  if (!currentLocation) return null;
+  if (!selectedMenuCategory)
+    return (
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={(evt, value) => setValue(value)}
-          variant="scrollable"
-        >
-          {menuCategories.map((item) => {
-            return (
-              <Tab
-                key={item.id}
-                label={item.name}
-                onClick={() => setSelectedMenuCategory(item)}
-              />
-            );
-          })}
-        </Tabs>
+    <OrderAppLayout address={currentAddress}>
+      <Box sx={{ width: "100vw" }}>
+        <Box sx={{ display: "flex" }}>
+          <Tabs
+            value={value}
+            onChange={(evt, value) => setValue(value)}
+            variant="scrollable"
+            sx={{ width: "100%" }}
+          >
+            {menuCategories.map((item) => {
+              return (
+                <Tab
+                  key={item.id}
+                  label={item.name}
+                  onClick={() => setSelectedMenuCategory(item)}
+                />
+              );
+            })}
+          </Tabs>
+        </Box>
+        <Box sx={{ display: "flex", flexWrap: "wrap", columnGap: 3, p: 2 }}>
+          {renderMenus()}
+        </Box>
       </Box>
-      <Box sx={{ display: "flex", flexWrap: "wraps", columnGap: 3, p: 3 }}>
-        {renderMenus()}
-      </Box>
-      <ViewCartBar />
-    </Box>
+    </OrderAppLayout>
   );
 };
 

@@ -79,7 +79,9 @@ const Addons = () => {
             <h1>No available addon!</h1>
           )}
         </Box>
-        <CreateNewAddons open={open} setOpen={setOpen} />
+        <Box sx={{ position: "fixed" }}>
+          <CreateNewAddons open={open} setOpen={setOpen} />
+        </Box>
       </Box>
     </Layout>
   );

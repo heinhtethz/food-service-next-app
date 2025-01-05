@@ -1,4 +1,5 @@
 import AddonCategoryComponent from "@/component/AddonCategoryComponent";
+import OrderAppLayout from "@/component/OrderLayout";
 import QuantitySelector from "@/component/QuantitySelector";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
@@ -96,37 +97,39 @@ const MenuUpdate = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        p: 4,
-      }}
-    >
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        {cartItem?.menu?.name}
-      </Typography>
-      <AddonCategoryComponent
-        validAddonCategories={validAddonCategories}
-        validAddons={validAddons}
-        selectedAddons={selectedAddons}
-        onChange={(checked, item) => handleAddonSelect(checked, item)}
-      />
-      <QuantitySelector
-        value={quantity}
-        onDecrease={handleQuantityDecrease}
-        onIncrease={handleQuantityIncrease}
-      />
-      <Button
-        variant="contained"
-        disabled={isDisabled}
-        onClick={updateCarts}
-        sx={{ mt: 3, width: "fit-content" }}
+    <OrderAppLayout>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          p: 4,
+        }}
       >
-        Update
-      </Button>
-    </Box>
+        <Typography variant="h4" sx={{ mb: 2 }}>
+          {cartItem?.menu?.name}
+        </Typography>
+        <AddonCategoryComponent
+          validAddonCategories={validAddonCategories}
+          validAddons={validAddons}
+          selectedAddons={selectedAddons}
+          onChange={(checked, item) => handleAddonSelect(checked, item)}
+        />
+        <QuantitySelector
+          value={quantity}
+          onDecrease={handleQuantityDecrease}
+          onIncrease={handleQuantityIncrease}
+        />
+        <Button
+          variant="contained"
+          disabled={isDisabled}
+          onClick={updateCarts}
+          sx={{ mt: 3, width: "fit-content" }}
+        >
+          Update
+        </Button>
+      </Box>
+    </OrderAppLayout>
   );
 };
 export default MenuUpdate;

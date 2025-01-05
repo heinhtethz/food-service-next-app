@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/store/hooks";
 import { appData, selectCarts } from "@/store/slices/appSlice";
-import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
@@ -31,13 +31,13 @@ const ViewCartBar = () => {
             alignItems: "center",
           }}
         >
-          <ShoppingCartCheckoutIcon sx={{ fontSize: "40px", color: "blue" }} />
+          <ShoppingCartIcon sx={{ fontSize: "40px", color: "blue" }} />
           <Typography
             variant="h6"
             component="div"
             sx={{ textAlign: "center", color: "green" }}
           >
-            {cartText}`
+            {cartText}
           </Typography>
         </Box>
       </Box>

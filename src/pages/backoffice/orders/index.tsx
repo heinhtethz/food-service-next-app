@@ -268,7 +268,7 @@ const OrderPage = () => {
 
   return (
     <Layout title="Orders">
-      <TableContainer component={Paper} sx={{ maxHeight: "100%" }}>
+      <TableContainer component={Paper} sx={{ maxHeight: "100%vw" }}>
         <Table aria-label="collapsible table" stickyHeader>
           <TableHead>
             <TableRow>

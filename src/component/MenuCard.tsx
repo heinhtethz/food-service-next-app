@@ -20,9 +20,9 @@ const MenuCard = ({ menu, href }: Props) => {
           marginBottom: "20px",
         }}
       >
-        <Card sx={{ width: 200, height: 220, py: 2 }}>
+        <Card sx={{ width: 180, height: 200 }} elevation={5}>
           <CardMedia
-            sx={{ height: 140, backgroundSize: "contain" }}
+            sx={{ height: 120, backgroundSize: "contained" }}
             image={menu.assetUrl || ""}
             component={"div"}
           />
@@ -34,8 +34,12 @@ const MenuCard = ({ menu, href }: Props) => {
             >
               {menu.name}
             </Typography>
-            <Typography gutterBottom variant="h6" sx={{ textAlign: "center" }}>
-              {menu.price} kyat
+            <Typography
+              gutterBottom
+              variant="subtitle1"
+              sx={{ textAlign: "center" }}
+            >
+              {menu.price} kyats
             </Typography>
           </CardContent>
         </Card>
