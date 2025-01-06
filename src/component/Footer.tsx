@@ -1,7 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import Image from "next/image";
 import Link from "next/link";
-import logoImage from "../assets/pngtree-food-logo.png";
 
 const Footer = () => {
   return (
