@@ -11,11 +11,6 @@ const BackofficeApp = () => {
   const { locations } = useAppSelector(appData);
   const { isLoading } = useAppSelector((state) => state.app);
   const locationIdFromLocalStorage = getSelectedLocationId();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchData());
-  }, [dispatch]);
 
   useEffect(() => {
     if (status === "authenticated") {
