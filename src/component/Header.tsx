@@ -1,59 +1,58 @@
-import { AppBar, Box, Button, Slide, Typography, Zoom } from "@mui/material";
-import Restaurant from "../assets/restaurant.png";
+import { Box, Slide, Typography } from "@mui/material";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import headerImage from "../assets/header.svg";
+import panda from "../assets/panda-cooking.png";
 
 const Header = () => {
-  const router = useRouter();
   return (
-    <Box sx={{ width: "100%", margin: "0 auto" }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Box>
-          <Slide in={true} direction="right" timeout={1000}>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: "bold",
-                fontFamily: "monospace",
-                maxWidth: 800,
-                mt: 20,
-              }}
-            >
-              Manage your menu catelog easily with Food Service.
-            </Typography>
-          </Slide>
-          <Box sx={{ display: "flex", gap: 5, mt: 5 }}>
-            <Slide in={true} direction="right" timeout={1000}>
-              <Button
-                variant="contained"
-                sx={{ bgcolor: "#BA0101" }}
-                onClick={() => router.push("/order")}
-              >
-                Order App
-              </Button>
-            </Slide>
-            <Slide in={true} direction="right" timeout={700}>
-              <Button
-                variant="contained"
-                sx={{ bgcolor: "#BA0101" }}
-                onClick={() => router.push("/backoffice")}
-              >
-                Backoffice App
-              </Button>
-            </Slide>
-          </Box>
+    <Box
+      sx={{
+        width: "100vw",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        minHeight: 300,
+        position: "fixed",
+        top: 0,
+        zIndex: 5,
+      }}
+    >
+      <Image
+        src={headerImage}
+        alt="header-image"
+        width={0}
+        height={0}
+        sizes="100vw"
+        style={{ width: "100%", height: "auto" }}
+      />
+      <Slide
+        direction="left"
+        in={true}
+        mountOnEnter
+        unmountOnExit
+        timeout={1000}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            right: 0,
+            display: { xs: "none", md: "block" },
+          }}
+        >
+          <Image src={panda} alt="header-image" width={350} height={350} />
         </Box>
-        <Box>
-          <Slide in={true} direction="left" timeout={1000}>
-            <Image
-              src={Restaurant}
-              width={550}
-              height={550}
-              alt="restaurant-image"
-            />
-          </Slide>
-        </Box>
-      </Box>
+      </Slide>
+      <Typography
+        variant="h2"
+        sx={{
+          position: "absolute",
+          fontWeight: "bold",
+          color: "#4C4C6D",
+          mt: 4,
+        }}
+      >
+        Foodie POS
+      </Typography>
     </Box>
   );
 };

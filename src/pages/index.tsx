@@ -1,24 +1,37 @@
 import Features from "@/component/Features";
+import Footer from "@/component/Footer";
 import Header from "@/component/Header";
-import WelcomePageTopBar from "@/component/welcomePageTopBar";
+import Hero from "@/component/heros";
+import Testimonials from "@/component/Testimonials";
 import { Box } from "@mui/material";
 
-const FoodServiceApp = () => {
+const FoodiePOS = () => {
   return (
-    <Box sx={{ bgcolor: "#f4ece2" }}>
-      <WelcomePageTopBar />
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        minHeight: "100vh",
+        overflowY: "auto",
+        flexDirection: "column",
+      }}
+    >
+      <Header />
       <Box
         sx={{
-          mx: 10,
-          maxWidth: { md: "100%", lg: "1500px" },
-          height: "100vh",
+          maxWidth: { md: "100%", lg: "1280px" },
+          m: "0 auto",
+          px: { xs: "10px", md: "15px" },
         }}
       >
-        <Header />
+        <Hero />
         <Features />
+        <Testimonials />
       </Box>
+      <Footer />
     </Box>
   );
 };
 
-export default FoodServiceApp;
+export default FoodiePOS;
