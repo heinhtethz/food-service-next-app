@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 const OrderApp = () => {
   const router = useRouter();
-  const { query, isReady } = router;
+  const { query } = router;
   const dispatch = useAppDispatch();
   const { menuCategories, menus, locations, menusMenuCategoriesLocations } =
     useAppSelector(appData);
@@ -83,7 +83,15 @@ const OrderApp = () => {
             })}
           </Tabs>
         </Box>
-        <Box sx={{ display: "flex", flexWrap: "wrap", columnGap: 3, p: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: { xs: "center", md: "flex-start" },
+            flexWrap: "wrap",
+            columnGap: 3,
+            p: 2,
+          }}
+        >
           {renderMenus()}
         </Box>
       </Box>

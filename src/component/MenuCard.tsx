@@ -10,41 +10,38 @@ interface Props {
 
 const MenuCard = ({ menu, href }: Props) => {
   return (
-    <Box>
-      <Link
-        key={menu.id}
-        href={href}
-        style={{
-          textDecoration: "none",
-          marginRight: "15px",
-          marginBottom: "20px",
-        }}
-      >
-        <Card sx={{ width: 180, height: 200 }} elevation={5}>
-          <CardMedia
-            sx={{ height: 120, backgroundSize: "contained" }}
-            image={menu.assetUrl || ""}
-            component={"div"}
-          />
-          <CardContent>
-            <Typography
-              gutterBottom
-              variant="subtitle1"
-              sx={{ textAlign: "center" }}
-            >
-              {menu.name}
-            </Typography>
-            <Typography
-              gutterBottom
-              variant="subtitle1"
-              sx={{ textAlign: "center" }}
-            >
-              {menu.price} kyats
-            </Typography>
-          </CardContent>
-        </Card>
-      </Link>
-    </Box>
+    <Link
+      key={menu.id}
+      href={href}
+      style={{
+        textDecoration: "none",
+        marginBottom: "15px",
+      }}
+    >
+      <Card sx={{ width: { xs: 375, md: 210 }, height: "auto" }} elevation={5}>
+        <CardMedia
+          sx={{ height: { xs: 150, md: 120 }, backgroundSize: "contained" }}
+          image={menu.assetUrl || ""}
+          component={"div"}
+        />
+        <CardContent>
+          <Typography
+            gutterBottom
+            variant="subtitle1"
+            sx={{ textAlign: "center" }}
+          >
+            {menu.name}
+          </Typography>
+          <Typography
+            gutterBottom
+            variant="subtitle1"
+            sx={{ textAlign: "center" }}
+          >
+            {menu.price} kyats
+          </Typography>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 
