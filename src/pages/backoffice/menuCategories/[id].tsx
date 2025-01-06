@@ -66,15 +66,8 @@ const EditMenuCategory = () => {
   const [open, setOpen] = useState(false);
 
   const handleUpdateMenuCategory = async () => {
-    const isValid = updateData?.name || updateMenuId?.length;
+    const isValid = updateData?.name && updateMenuId?.length;
     if (!isValid) return alert("Pls fill at least one of this fields");
-    console.log(
-      updateData?.name,
-      menuCategory?.id,
-      updateMenuId,
-      "locationId",
-      Number(selectedLocationId)
-    );
     const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
       method: "PUT",
       headers: {

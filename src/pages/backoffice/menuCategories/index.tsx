@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,7 +12,7 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { appData, fetchData } from "@/store/slices/appSlice";
+import { appData } from "@/store/slices/appSlice";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
 import { getSelectedLocationId, menuCategoryByLocationId } from "@/utils";
