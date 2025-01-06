@@ -133,7 +133,7 @@ const NavBar = ({ title }: Props) => {
   );
 
   return (
-    <Box sx={{ mb: "65px  " }}>
+    <Box sx={{ mb: "80px" }}>
       <AppBar position="fixed" sx={{ overflow: "hidden" }}>
         <Toolbar
           sx={{

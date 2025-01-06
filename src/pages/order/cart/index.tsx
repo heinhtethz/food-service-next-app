@@ -75,6 +75,7 @@ const Review = () => {
       dispatch(addOrder(responseJSON));
       router.push({
         pathname: `/order/activeOrder/${responseJSON.id}`,
+        query,
       });
     }
   };

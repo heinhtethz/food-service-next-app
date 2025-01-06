@@ -7,10 +7,6 @@ import { useEffect } from "react";
 import { fetchData } from "@/store/slices/appSlice";
 
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    store.dispatch(fetchData());
-  }, []);
-
   return (
     <SessionProvider>
       <Provider store={store}>

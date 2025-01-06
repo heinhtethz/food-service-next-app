@@ -11,7 +11,8 @@ import {
 import { ReactNode, useEffect, useState } from "react";
 
 import { OrderHeader } from "./OrderHeader";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch } from "@/store/hooks";
+import { useRouter } from "next/router";
 import { fetchData } from "@/store/slices/appSlice";
 
 interface Props {
@@ -31,16 +32,15 @@ const theme = createTheme({
 });
 
 const OrderAppLayout = ({ children, address }: Props) => {
-  const { isLoading, init } = useAppSelector((state) => state.app);
   const dispatch = useAppDispatch();
+  const { query, isReady } = useRouter();
 
   useEffect(() => {
-    if (!init) {
-      dispatch(fetchData());
+    if (isReady) {
+      dispatch(fetchData({ locationId: query.locationId as string }));
     }
-  }, [dispatch, init]);
+  }, [isReady, dispatch, query]);
 
-  if (isLoading) return null;
   return (
     <ThemeProvider theme={theme}>
       <OrderHeader address={address} />

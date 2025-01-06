@@ -1,6 +1,6 @@
 import MenuCard from "@/component/MenuCard";
 import OrderAppLayout from "@/component/OrderLayout";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { menusByMenuCategoryId } from "@/utils";
 import { CircularProgress } from "@mui/material";
@@ -13,7 +13,8 @@ import { useEffect, useState } from "react";
 
 const OrderApp = () => {
   const router = useRouter();
-  const query = router.query;
+  const { query, isReady } = router;
+  const dispatch = useAppDispatch();
   const { menuCategories, menus, locations, menusMenuCategoriesLocations } =
     useAppSelector(appData);
   const currentLocation = locations.find(
@@ -46,14 +47,20 @@ const OrderApp = () => {
       return <MenuCard key={item.id} menu={item} href={href} />;
     });
   };
-  if (!currentLocation) return null;
+
   if (!selectedMenuCategory)
     return (
-      <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <CircularProgress />
-      </Box>
+      <OrderAppLayout>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </OrderAppLayout>
     );
   return (
     <OrderAppLayout address={currentAddress}>

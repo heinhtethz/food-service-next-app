@@ -15,7 +15,7 @@ const Layout = ({ title, children }: Props) => {
 
   useEffect(() => {
     if (!init) {
-      dispatch(fetchData());
+      dispatch(fetchData({ locationId: undefined }));
     }
   }, [dispatch, init]);
 

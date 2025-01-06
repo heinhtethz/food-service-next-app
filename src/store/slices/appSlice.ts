@@ -31,11 +31,17 @@ const initialState: CounterState = {
   error: null,
 };
 
+interface OrderAppPayload {
+  locationId?: string;
+}
+
 export const fetchData = createAsyncThunk(
   "data/fetchData",
-  async (locationId, thunkAPI) => {
+  async ({ locationId }: OrderAppPayload, thunkAPI) => {
     thunkAPI.dispatch(setAppLoading(true));
-    const response = await fetch(`${config.apiBaseUrl}/app`);
+    const response = await fetch(
+      `${config.apiBaseUrl}/app?locationId=${locationId}`
+    );
     const {
       menus,
       menuCategories,
