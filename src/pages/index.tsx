@@ -1,7 +1,7 @@
 import Features from "@/component/Features";
 import Footer from "@/component/Footer";
 import Header from "@/component/Header";
-import Heros from "@/component/heros";
+import Hero from "@/component/Hero";
 import Testimonials from "@/component/Testimonials";
 import { Box } from "@mui/material";
 
@@ -25,7 +25,7 @@ const FoodiePOS = () => {
           px: { xs: "10px", md: "15px" },
         }}
       >
-        <Heros />
+        <Hero />
         <Features />
         <Testimonials />
       </Box>
