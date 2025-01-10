@@ -1,59 +1,121 @@
-import { Box, Slide, Typography } from "@mui/material";
-import Image from "next/image";
-import headerImage from "../assets/header.svg";
-import panda from "../assets/panda-cooking.png";
+import {
+  AppBar,
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  Link,
+  List,
+  ListItem,
+  Slide,
+  Toolbar,
+  Typography,
+  useScrollTrigger,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
+import zIndex from "@mui/material/styles/zIndex";
 
-const Header = () => {
+interface Props {
+  window?: () => Window;
+}
+
+const Header = ({ window }: Props) => {
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+  });
+
+  const [open, setOpen] = useState(false);
+
   return (
-    <Box
-      sx={{
-        width: "100vw",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        minHeight: 300,
-        position: "fixed",
-        top: 0,
-        zIndex: 5,
-      }}
-    >
-      <Image
-        src={headerImage}
-        alt="header-image"
-        width={0}
-        height={0}
-        sizes="100vw"
-        style={{ width: "100%", height: "auto" }}
-      />
-      <Slide
-        direction="left"
-        in={true}
-        mountOnEnter
-        unmountOnExit
-        timeout={1000}
-      >
-        <Box
+    <>
+      <Slide appear={false} direction="down" in={!trigger}>
+        <AppBar sx={{ bgcolor: "white", p: 1 }}>
+          <Toolbar>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  color: "#2D284D",
+                  fontFamily: "fantasy",
+                }}
+              >
+                Food Service{" "}
+              </Typography>
+              <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                <Link href="/order?locationId=1&tableId=1" sx={{ mr: 1 }}>
+                  <Button
+                    variant="contained"
+                    sx={{ backgroundColor: "primary", borderRadius: 5 }}
+                  >
+                    Order App
+                  </Button>
+                </Link>
+                <Link>
+                  <Button
+                    variant="contained"
+                    sx={{ backgroundColor: "primary", borderRadius: 5 }}
+                  >
+                    Backoffice App
+                  </Button>
+                </Link>
+              </Box>
+              <IconButton
+                sx={{ display: { xs: "flex", md: "none" } }}
+                onClick={() => (open ? setOpen(false) : setOpen(true))}
+              >
+                {open ? (
+                  <CloseIcon color="primary" />
+                ) : (
+                  <MenuIcon color="primary" />
+                )}
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </Slide>
+      <Drawer open={open} anchor="right" sx={{ zIndex: 0 }}>
+        <List
           sx={{
-            position: "absolute",
-            right: 0,
-            display: { xs: "none", md: "block" },
+            pt: 15,
+            width: "100vw",
+            height: "100%",
+            bgcolor: "#111111",
           }}
         >
-          <Image src={panda} alt="header-image" width={350} height={350} />
-        </Box>
-      </Slide>
-      <Typography
-        variant="h2"
-        sx={{
-          position: "absolute",
-          fontWeight: "bold",
-          color: "#4C4C6D",
-          mt: 4,
-        }}
-      >
-        Foodie POS
-      </Typography>
-    </Box>
+          <ListItem sx={{ pl: 5 }}>
+            <Link
+              href="/order/locationId=1&tableId=1"
+              sx={{ color: "white", fontSize: "large" }}
+              underline="none"
+            >
+              Order App
+            </Link>
+          </ListItem>
+          <ListItem sx={{ pl: 5 }}>
+            <Link
+              href="/backoffice"
+              sx={{ color: "white", fontSize: "large" }}
+              underline="none"
+            >
+              Backoffice App
+            </Link>
+          </ListItem>
+          <ListItem sx={{ pl: 5 }}>
+            <Link sx={{ color: "white", fontSize: "large" }} underline="none">
+              About
+            </Link>
+          </ListItem>
+        </List>
+      </Drawer>
+    </>
   );
 };
 

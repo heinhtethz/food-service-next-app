@@ -1,5 +1,5 @@
 import Layout from "@/component/Layout";
-import WelcomePageTopBar from "@/component/welcomePageTopBar";
+import WelcomePageTopBar from "@/component/Header";
 import { Box, Button } from "@mui/material";
 import { signIn } from "next-auth/react";
 

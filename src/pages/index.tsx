@@ -3,7 +3,6 @@ import Footer from "@/component/Footer";
 import Header from "@/component/Header";
 import Hero from "@/component/Hero";
 import Testimonials from "@/component/Testimonials";
-import WelcomePageTopBar from "@/component/welcomePageTopBar";
 import { Box } from "@mui/material";
 
 const FoodiePOS = () => {
@@ -17,8 +16,8 @@ const FoodiePOS = () => {
         flexDirection: "column",
       }}
     >
-      <WelcomePageTopBar />
-      <Box sx={{ mt: { xs: "none", lg: -20 }, width: "100%" }}>
+      <Header />
+      <Box sx={{ mt: { xs: "none", lg: -30 }, width: "100%" }}>
         <video width="100%" height="auto" muted loop autoPlay>
           <source src="https://bit.ly/3DZqWwo" type="video/mp4" />
         </video>
