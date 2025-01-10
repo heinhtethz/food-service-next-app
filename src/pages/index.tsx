@@ -3,6 +3,7 @@ import Footer from "@/component/Footer";
 import Header from "@/component/Header";
 import Hero from "@/component/Hero";
 import Testimonials from "@/component/Testimonials";
+import WelcomePageTopBar from "@/component/welcomePageTopBar";
 import { Box } from "@mui/material";
 
 const FoodiePOS = () => {
@@ -13,16 +14,20 @@ const FoodiePOS = () => {
         width: "100%",
         height: "100%",
         minHeight: "100vh",
-        overflowY: "auto",
         flexDirection: "column",
       }}
     >
-      <Header />
+      <WelcomePageTopBar />
+      <Box sx={{ mt: { xs: "none", lg: -20 }, width: "100%" }}>
+        <video width="100%" height="auto" muted loop autoPlay>
+          <source src="https://bit.ly/3DZqWwo" type="video/mp4" />
+        </video>
+      </Box>
       <Box
         sx={{
           maxWidth: { md: "100%", lg: "1280px" },
           m: "0 auto",
-          px: { xs: "10px", md: "15px" },
+          px: { xs: 2, md: 5 },
         }}
       >
         <Hero />
