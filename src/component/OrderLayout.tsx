@@ -20,17 +20,6 @@ interface Props {
   address?: string;
 }
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#f50057", // Foodpanda pink color
-    },
-    secondary: {
-      main: "#000000",
-    },
-  },
-});
-
 const OrderAppLayout = ({ children, address }: Props) => {
   const dispatch = useAppDispatch();
   const { query, isReady } = useRouter();
@@ -42,10 +31,10 @@ const OrderAppLayout = ({ children, address }: Props) => {
   }, [isReady, dispatch, query]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <OrderHeader address={address} />
       {children}
-    </ThemeProvider>
+    </>
   );
 };
 

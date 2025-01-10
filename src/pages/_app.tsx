@@ -1,17 +1,31 @@
 import { store } from "@/store";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import "../styles/global.css";
-import { useEffect } from "react";
-import { fetchData } from "@/store/slices/appSlice";
+import { createTheme, ThemeProvider } from "@mui/material";
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#2E294E",
+    },
+    secondary: {
+      main: "#717B98",
+    },
+    error: {
+      main: "#FF0000",
+    },
+  },
+});
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider>
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
-    </SessionProvider>
+    <ThemeProvider theme={theme}>
+      <SessionProvider>
+        <Provider store={store}>
+          <Component {...pageProps} />
+        </Provider>
+      </SessionProvider>
+    </ThemeProvider>
   );
 }

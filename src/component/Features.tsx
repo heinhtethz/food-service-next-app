@@ -40,7 +40,7 @@ const Features = () => {
         display: "flex",
         mt: 15,
         flexWrap: "wrap",
-        justifyContent: "center",
+        justifyContent: "space-evenly",
       }}
     >
       {features.map((item) => {
@@ -56,7 +56,9 @@ const Features = () => {
             <Box sx={{ textAlign: "center", maxWidth: 330, mb: 10, px: 5 }}>
               {item.icon}
 
-              <Typography variant="h6">{item.text}</Typography>
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                {item.text}
+              </Typography>
             </Box>
           </Zoom>
         );
