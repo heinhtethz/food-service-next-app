@@ -58,7 +58,7 @@ const Header = ({ window }: Props) => {
                     Order App
                   </Button>
                 </Link>
-                <Link>
+                <Link href="/backoffice">
                   <Button
                     variant="contained"
                     sx={{ backgroundColor: "primary", borderRadius: 5 }}
@@ -92,7 +92,7 @@ const Header = ({ window }: Props) => {
         >
           <ListItem sx={{ pl: 5 }}>
             <Link
-              href="/order/locationId=1&tableId=1"
+              href="/order?locationId=1&tableId=1"
               sx={{ color: "white", fontSize: "large" }}
               underline="none"
             >
