@@ -11,16 +11,31 @@ interface Props {
 const MenuCard = ({ menu, href }: Props) => {
   return (
     <Link
-      key={menu.id}
       href={href}
       style={{
         textDecoration: "none",
         marginBottom: "15px",
+        padding: 0,
+        cursor: "pointer",
       }}
     >
-      <Card sx={{ width: { xs: 375, md: 210 }, height: "auto" }} elevation={5}>
+      <Card
+        sx={{
+          width: { xs: "90vw", sm: "43vw", md: "28vw", lg: "15vw" },
+          height: "auto",
+        }}
+        elevation={5}
+      >
         <CardMedia
-          sx={{ height: { xs: 150, md: 120 }, backgroundSize: "contained" }}
+          sx={{
+            height: { xs: 150, md: 120 },
+            backgroundSize: "contained",
+            transition: "transform 0.3s ease, box-shadow 0.3s ease",
+            "&:hover": {
+              transform: "scale(1.1)", // Slight size increase
+              boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)", // Add shadow on hover
+            },
+          }}
           image={menu.assetUrl || ""}
           component={"div"}
         />

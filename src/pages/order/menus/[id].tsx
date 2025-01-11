@@ -2,14 +2,13 @@ import AddonCategoryComponent from "@/component/AddonCategoryComponent";
 import OrderAppLayout from "@/component/OrderLayout";
 import QuantitySelector from "@/component/QuantitySelector";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { appData, selectCarts } from "@/store/slices/appSlice";
-import { addCart, setCarts, updateCart } from "@/store/slices/cartSlice";
+import { appData } from "@/store/slices/appSlice";
+import { addCart } from "@/store/slices/cartSlice";
 import { addonCategoriesByMenuId, generateRandomId } from "@/utils";
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import { AddonCategories, Addons } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
 const Menu = () => {
   const router = useRouter();
@@ -22,6 +21,7 @@ const Menu = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedAddons, setSelectedAddons] = useState<Addons[]>([]);
   const [isDisabled, setIsDisabled] = useState(false);
+
   const validAddonCategories = addonCategoriesByMenuId(
     addonCategories,
     menusAddonCategories,

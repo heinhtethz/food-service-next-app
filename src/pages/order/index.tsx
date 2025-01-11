@@ -64,13 +64,20 @@ const OrderApp = () => {
     );
   return (
     <OrderAppLayout address={currentAddress}>
-      <Box sx={{ width: "100vw" }}>
+      <Box sx={{ width: "100vw", px: { xs: "none", md: 2 } }}>
         <Box sx={{ display: "flex" }}>
           <Tabs
             value={value}
             onChange={(evt, value) => setValue(value)}
             variant="scrollable"
             sx={{ width: "100%" }}
+            TabIndicatorProps={{
+              style: {
+                height: "4px",
+                borderRadius: "2px",
+                backgroundColor: "#717B98",
+              },
+            }}
           >
             {menuCategories.map((item) => {
               return (
@@ -86,10 +93,10 @@ const OrderApp = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: { xs: "center", md: "flex-start" },
+            justifyContent: { xs: "center", sm: "flex-start" },
             flexWrap: "wrap",
-            columnGap: 3,
-            p: 2,
+            gap: 3,
+            mt: 2,
           }}
         >
           {renderMenus()}

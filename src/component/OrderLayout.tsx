@@ -31,10 +31,10 @@ const OrderAppLayout = ({ children, address }: Props) => {
   }, [isReady, dispatch, query]);
 
   return (
-    <>
+    <Box>
       <OrderHeader address={address} />
       {children}
-    </>
+    </Box>
   );
 };
 

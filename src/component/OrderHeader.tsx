@@ -1,5 +1,5 @@
 // components/Header.tsx
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -13,8 +13,6 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { useRouter } from "next/router";
-import Image from "next/image";
-import LogoImage from "../assets/pngtree-food-logo.png";
 
 interface Props {
   address?: string;
@@ -23,18 +21,18 @@ interface Props {
 export const OrderHeader = ({ address }: Props) => {
   const { carts } = useAppSelector(appData);
   const router = useRouter();
+
   return (
     <AppBar
       position="sticky"
       color="default"
       elevation={1}
-      sx={{ bgcolor: "white" }}
+      sx={{ bgcolor: "white", width: "100%" }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex" }}>
-          <Image src={LogoImage} alt="logoImage" height={30} width={30} />
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            Foodie
+            Foodies
           </Typography>
         </Box>
         {address && (
@@ -48,9 +46,9 @@ export const OrderHeader = ({ address }: Props) => {
         ) : (
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <IconButton
-              onClick={() =>
-                router.push({ pathname: "/order/cart", query: router.query })
-              }
+              onClick={() => {
+                router.push({ pathname: "/order/cart", query: router.query });
+              }}
             >
               <Badge badgeContent={carts.length} color="secondary">
                 <ShoppingCartIcon color="primary" />
