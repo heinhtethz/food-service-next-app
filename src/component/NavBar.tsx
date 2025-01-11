@@ -153,13 +153,6 @@ const NavBar = ({ title }: Props) => {
           ) : (
             <span></span>
           )}
-          <Image
-            src={logoImg}
-            width={50}
-            height={50}
-            alt="Logo"
-            priority={false}
-          />
           <Typography
             variant="h5"
             sx={{ flexGrow: 1, color: "#BA0101", fontFamily: "fantasy" }}
