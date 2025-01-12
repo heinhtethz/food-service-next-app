@@ -1,5 +1,8 @@
-import { Avatar, Box, Paper, Slide, Typography } from "@mui/material";
+import { Avatar, Box, Button, Paper, Slide, Typography } from "@mui/material";
 import Image from "next/image";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useRef } from "react";
 
 const testimonials = [
   {
@@ -23,31 +26,87 @@ const testimonials = [
     description: `Integrated system. Easy to use. Very satisfied. Highly recommended for everyone. 
     Foodie POS customer service is a top-notch! They are always there when we need help. 5 starsss!`,
   },
+  {
+    name: "Zen",
+    company: "Swey Mel Co. Ltd",
+    avatar: "/pic3.jpeg",
+    description: `Integrated system. Easy to use. Very satisfied. Highly recommended for everyone. 
+    Foodie POS customer service is a top-notch! They are always there when we need help. 5 starsss!`,
+  },
+  {
+    name: "Zen",
+    company: "Swey Mel Co. Ltd",
+    avatar: "/pic3.jpeg",
+    description: `Integrated system. Easy to use. Very satisfied. Highly recommended for everyone. 
+    Foodie POS customer service is a top-notch! They are always there when we need help. 5 starsss!`,
+  },
+  {
+    name: "Zen",
+    company: "Swey Mel Co. Ltd",
+    avatar: "/pic3.jpeg",
+    description: `Integrated system. Easy to use. Very satisfied. Highly recommended for everyone. 
+    Foodie POS customer service is a top-notch! They are always there when we need help. 5 starsss!`,
+  },
+  {
+    name: "Zen",
+    company: "Swey Mel Co. Ltd",
+    avatar: "/pic3.jpeg",
+    description: `Integrated system. Easy to use. Very satisfied. Highly recommended for everyone. 
+    Foodie POS customer service is a top-notch! They are always there when we need help. 5 starsss!`,
+  },
 ];
 
 const Testimonials = () => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = (direction: string) => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const scrollAmount = 300; // Adjust scroll amount as needed
+      if (direction === "left") {
+        container.scrollLeft -= scrollAmount;
+      } else {
+        container.scrollLeft += scrollAmount;
+      }
+    }
+  };
   return (
     <Box
       sx={{
         display: "flex",
-        justifyContent: "space-evenly",
-        my: 5,
-        minHeight: 350,
-        flexWrap: "wrap",
+        alignItems: "center",
+        position: "relative",
+        width: "100%",
       }}
     >
-      {testimonials.map((item) => {
-        return (
-          <Slide direction="up" in key={item.description}>
+      <Button
+        onClick={() => handleScroll("left")}
+        sx={{ display: { xs: "none", md: "flex" } }}
+      >
+        <ArrowBackIosNewIcon />
+      </Button>
+      <Box
+        ref={scrollContainerRef}
+        sx={{
+          display: "flex",
+          overflowX: "scroll",
+          scrollBehavior: "smooth",
+          scrollbarWidth: "none",
+          gap: "16px",
+        }}
+      >
+        {testimonials.map((item) => {
+          return (
             <Paper
+              key={item.name}
               sx={{
-                width: 300,
-                height: 230,
+                minWidth: 250,
+                height: "auto",
                 p: 2,
                 mb: 3,
                 borderRadius: 3,
                 position: "relative",
-                bgcolor: "#1B9C85",
+                bgcolor: "#2E294E",
               }}
             >
               <Box
@@ -88,9 +147,12 @@ const Testimonials = () => {
                 {item.description}
               </Typography>
             </Paper>
-          </Slide>
-        );
-      })}
+          );
+        })}
+      </Box>
+      <Button sx={{ display: { xs: "none", md: "flex" } }}>
+        <ArrowForwardIosIcon onClick={() => handleScroll("right")} />
+      </Button>
     </Box>
   );
 };

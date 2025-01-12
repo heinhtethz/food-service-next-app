@@ -3,7 +3,7 @@ import Footer from "@/component/Footer";
 import Header from "@/component/Header";
 import Hero from "@/component/Hero";
 import Testimonials from "@/component/Testimonials";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const FoodiePOS = () => {
   return (
@@ -17,16 +17,44 @@ const FoodiePOS = () => {
       }}
     >
       <Header />
-      <Box sx={{ mt: { xs: "none", lg: -30 }, width: "100%" }}>
+      <Box
+        sx={{
+          mt: { lg: -30 },
+          width: "100%",
+          "& video": {
+            filter: "brightness(0.8)", // Darkens the video
+          },
+        }}
+      >
         <video width="100%" height="auto" muted loop autoPlay>
           <source src="https://bit.ly/3DZqWwo" type="video/mp4" />
         </video>
+        <Box
+          sx={{
+            position: "absolute",
+            top: { xs: "17%", sm: "30%", lg: "45%" },
+            ml: 4,
+            color: "white",
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: { xs: "2em", sm: "3em" },
+              fontWeight: "bold",
+              lineHeight: 1,
+            }}
+          >
+            food and drinks <br></br>
+            in a tap
+          </Typography>
+        </Box>
       </Box>
+
       <Box
         sx={{
-          maxWidth: { md: "100%", lg: "1280px" },
-          m: "0 auto",
-          px: { xs: 2, md: 5 },
+          width: { xs: "90%", md: "100%" },
+          margin: "0 auto",
         }}
       >
         <Hero />

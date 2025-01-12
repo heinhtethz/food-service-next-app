@@ -7,27 +7,27 @@ import { Box, Typography, Zoom } from "@mui/material";
 
 const features = [
   {
-    icon: <MenuBookIcon sx={{ fontSize: "90px", color: "#1B9C85" }} />,
+    icon: <MenuBookIcon sx={{ fontSize: "90px", color: "#2E294E" }} />,
     text: "Easily manage your menus with Foodie POS",
     delay: "1000ms",
   },
   {
-    icon: <QrCode2Icon sx={{ fontSize: "90px", color: "#1B9C85" }} />,
+    icon: <QrCode2Icon sx={{ fontSize: "90px", color: "#2E294E" }} />,
     text: "Scan and order. Quick and easy! Your customers will love it!",
     delay: "1300ms",
   },
   {
-    icon: <LocationOn sx={{ fontSize: "90px", color: "#1B9C85" }} />,
+    icon: <LocationOn sx={{ fontSize: "90px", color: "#2E294E" }} />,
     text: "Foodie POS supports multiple locations for your business.",
     delay: "1500ms",
   },
   {
-    icon: <ChecklistIcon sx={{ fontSize: "90px", color: "#1B9C85" }} />,
+    icon: <ChecklistIcon sx={{ fontSize: "90px", color: "#2E294E" }} />,
     text: "Backoffice and order apps are included in every subscription.",
     delay: "1700ms",
   },
   {
-    icon: <SupportAgentIcon sx={{ fontSize: "90px", color: "#1B9C85" }} />,
+    icon: <SupportAgentIcon sx={{ fontSize: "90px", color: "#2E294E" }} />,
     text: "Dedicated customer support so that we are awlays here to help you.",
     delay: "2000ms",
   },
@@ -53,7 +53,7 @@ const Features = () => {
               transitionDuration: "1000ms",
             }}
           >
-            <Box sx={{ textAlign: "center", maxWidth: 330, mb: 10, px: 5 }}>
+            <Box sx={{ textAlign: "center", maxWidth: 330, mb: 10 }}>
               {item.icon}
 
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
