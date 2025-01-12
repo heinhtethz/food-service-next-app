@@ -19,7 +19,7 @@ import { MenuCategories } from "@prisma/client";
 
 interface Props {
   address?: string;
-  setSelectedMenuCategory: React.Dispatch<
+  setSelectedMenuCategory?: React.Dispatch<
     React.SetStateAction<MenuCategories | undefined>
   >;
 }
@@ -101,7 +101,9 @@ export const OrderHeader: React.FC<Props> = ({
                   <Tab
                     key={item.id}
                     label={item.name}
-                    onClick={() => setSelectedMenuCategory(item)}
+                    onClick={() =>
+                      setSelectedMenuCategory && setSelectedMenuCategory(item)
+                    }
                   />
                 );
               })}

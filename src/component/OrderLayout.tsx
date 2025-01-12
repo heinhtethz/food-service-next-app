@@ -20,7 +20,7 @@ import { MenuCategories } from "@prisma/client";
 interface Props {
   children: ReactNode;
   address?: string;
-  setSelectedMenuCategory: React.Dispatch<
+  setSelectedMenuCategory?: React.Dispatch<
     React.SetStateAction<MenuCategories | undefined>
   >;
 }
