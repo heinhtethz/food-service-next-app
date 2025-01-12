@@ -2,6 +2,7 @@ import { Add } from "@mui/icons-material";
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { Menus } from "@prisma/client";
 import Link from "next/link";
+import Image from "../../public/next.svg";
 
 interface Props {
   menu: Menus;
@@ -21,10 +22,10 @@ const MenuCard = ({ menu, href }: Props) => {
     >
       <Card
         sx={{
-          width: { xs: "90vw", sm: "43vw", md: "28vw", lg: "15vw" },
+          width: { xs: "90vw", sm: "43vw", md: "28vw", lg: 250 },
           height: "auto",
         }}
-        elevation={5}
+        elevation={3}
       >
         <CardMedia
           sx={{
@@ -43,15 +44,11 @@ const MenuCard = ({ menu, href }: Props) => {
           <Typography
             gutterBottom
             variant="subtitle1"
-            sx={{ textAlign: "center" }}
+            sx={{ fontWeight: "bold" }}
           >
             {menu.name}
           </Typography>
-          <Typography
-            gutterBottom
-            variant="subtitle1"
-            sx={{ textAlign: "center" }}
-          >
+          <Typography gutterBottom variant="caption">
             {menu.price} kyats
           </Typography>
         </CardContent>

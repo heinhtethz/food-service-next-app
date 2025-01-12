@@ -20,6 +20,8 @@ const FoodiePOS = () => {
       <Box
         sx={{
           mt: { lg: -30 },
+          position: "relative",
+          overflow: "hidden",
           width: "100%",
           "& video": {
             filter: "brightness(0.8)", // Darkens the video
@@ -32,15 +34,16 @@ const FoodiePOS = () => {
         <Box
           sx={{
             position: "absolute",
-            top: { xs: "17%", sm: "30%", lg: "45%" },
-            ml: 4,
-            color: "white",
+            width: "100%",
+            top: { xs: "70%", md: "80%" },
+            left: { xs: "10%", md: "15% " },
           }}
         >
           <Typography
             variant="h3"
             sx={{
-              fontSize: { xs: "2em", sm: "3em" },
+              color: "white",
+              fontSize: { xs: "5vw", md: "4vw" },
               fontWeight: "bold",
               lineHeight: 1,
             }}
@@ -53,7 +56,7 @@ const FoodiePOS = () => {
 
       <Box
         sx={{
-          width: { xs: "90%", md: "100%" },
+          width: { xs: "90%", md: "100%", lg: "80%" },
           margin: "0 auto",
         }}
       >

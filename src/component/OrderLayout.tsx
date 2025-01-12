@@ -14,13 +14,22 @@ import { OrderHeader } from "./OrderHeader";
 import { useAppDispatch } from "@/store/hooks";
 import { useRouter } from "next/router";
 import { fetchData } from "@/store/slices/appSlice";
+import Footer from "./Footer";
+import { MenuCategories } from "@prisma/client";
 
 interface Props {
   children: ReactNode;
   address?: string;
+  setSelectedMenuCategory: React.Dispatch<
+    React.SetStateAction<MenuCategories | undefined>
+  >;
 }
 
-const OrderAppLayout = ({ children, address }: Props) => {
+const OrderAppLayout: React.FC<Props> = ({
+  children,
+  address,
+  setSelectedMenuCategory,
+}) => {
   const dispatch = useAppDispatch();
   const { query, isReady } = useRouter();
 
@@ -32,8 +41,21 @@ const OrderAppLayout = ({ children, address }: Props) => {
 
   return (
     <Box>
-      <OrderHeader address={address} />
-      {children}
+      <OrderHeader
+        address={address}
+        setSelectedMenuCategory={setSelectedMenuCategory}
+      />
+      <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        {children}
+        <Footer />
+      </Box>
     </Box>
   );
 };

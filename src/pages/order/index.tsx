@@ -21,7 +21,6 @@ const OrderApp = () => {
     (item) => item.id === Number(query.locationId)
   ) as Locations;
   const currentAddress = currentLocation?.address;
-  const [value, setValue] = useState(0);
   const [selectedMenuCategory, setSelectedMenuCategory] =
     useState<MenuCategories>();
 
@@ -50,7 +49,10 @@ const OrderApp = () => {
 
   if (!selectedMenuCategory)
     return (
-      <OrderAppLayout>
+      <OrderAppLayout
+        address={currentAddress}
+        setSelectedMenuCategory={setSelectedMenuCategory}
+      >
         <Box
           sx={{
             display: "flex",
@@ -63,33 +65,11 @@ const OrderApp = () => {
       </OrderAppLayout>
     );
   return (
-    <OrderAppLayout address={currentAddress}>
-      <Box sx={{ width: "100vw", px: { xs: "none", md: 2 } }}>
-        <Box sx={{ display: "flex" }}>
-          <Tabs
-            value={value}
-            onChange={(evt, value) => setValue(value)}
-            variant="scrollable"
-            sx={{ width: "100%" }}
-            TabIndicatorProps={{
-              style: {
-                height: "4px",
-                borderRadius: "2px",
-                backgroundColor: "#717B98",
-              },
-            }}
-          >
-            {menuCategories.map((item) => {
-              return (
-                <Tab
-                  key={item.id}
-                  label={item.name}
-                  onClick={() => setSelectedMenuCategory(item)}
-                />
-              );
-            })}
-          </Tabs>
-        </Box>
+    <OrderAppLayout
+      address={currentAddress}
+      setSelectedMenuCategory={setSelectedMenuCategory}
+    >
+      <Box sx={{ width: "100%" }}>
         <Box
           sx={{
             display: "flex",
@@ -97,6 +77,7 @@ const OrderApp = () => {
             flexWrap: "wrap",
             gap: 3,
             mt: 2,
+            px: 3,
           }}
         >
           {renderMenus()}
