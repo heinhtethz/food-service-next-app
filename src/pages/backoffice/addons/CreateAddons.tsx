@@ -6,15 +6,13 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { addonCategoryByLocationId } from "@/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { appData, fetchData } from "@/store/slices/appSlice";
+import { appData } from "@/store/slices/appSlice";
 import { config } from "@/config/config";
-import AutocompleteComponent from "@/component/Autocomplete";
 import SingleValueAutocomplete from "@/component/SingleValueAutocomplete";
 import { addAddon } from "@/store/slices/addonsSlice";
-import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;

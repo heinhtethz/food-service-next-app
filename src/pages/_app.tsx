@@ -20,12 +20,12 @@ const theme = createTheme({
 });
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={theme}>
-      <SessionProvider>
-        <Provider store={store}>
+    <SessionProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
           <Component {...pageProps} />
-        </Provider>
-      </SessionProvider>
-    </ThemeProvider>
+        </ThemeProvider>
+      </Provider>
+    </SessionProvider>
   );
 }

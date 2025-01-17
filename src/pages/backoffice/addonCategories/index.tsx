@@ -15,13 +15,10 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { appData, fetchData } from "@/store/slices/appSlice";
-import { config } from "@/config/config";
+import { appData } from "@/store/slices/appSlice";
 import Layout from "@/component/Layout";
-import AutocompleteComponent from "@/component/Autocomplete";
 import Link from "next/link";
-import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
-import { addAddonCategory } from "@/store/slices/addonCategoriesSlice";
+import CreateAddonCategory from "./CreateAddonCategory";
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
   width: 120,
@@ -40,12 +37,6 @@ const AddonCategories = () => {
     menusAddonCategories,
   } = useAppSelector(appData);
   const [open, setOpen] = useState(false);
-  const [checked, setChecked] = useState(true);
-  const [addonCategory, setAddonCategory] = useState({
-    name: "",
-    menuIds: [] as number[],
-    isRequired: checked,
-  });
 
   const validAddonCategories = addonCategoryByLocationId(
     addonCategories,
@@ -54,30 +45,6 @@ const AddonCategories = () => {
     menusAddonCategories
   );
 
-  const validMenusByLocation = menuByLocationId(
-    menusMenuCategoriesLocations,
-    menus
-  ).map((item) => ({ id: item.id, name: item.name }));
-  const validMenuIds = validMenusByLocation.map((item) => item.id) as number[];
-  const defaultMenu = validMenusByLocation[0];
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
-
-  const createAddonCategory = async () => {
-    const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(addonCategory),
-    });
-    const responseData = await response.json();
-    dispatch(addAddonCategory(responseData));
-    dispatch(fetchMenusAddonCategories(validMenuIds));
-    setOpen(false);
-  };
   return (
     <Layout title="Addon Categories">
       <Box sx={{ mx: 2, mt: 2 }}>
@@ -116,58 +83,7 @@ const AddonCategories = () => {
             <h1>No available addon category!</h1>
           )}
         </Box>
-        <Dialog
-          open={open}
-          onClose={() => setOpen(false)}
-          sx={{ minWidth: 500 }}
-        >
-          <DialogTitle>Create New Addon Category</DialogTitle>
-          <DialogContent>
-            <form onSubmit={createAddonCategory}>
-              <TextField
-                placeholder="Name"
-                variant="outlined"
-                fullWidth
-                onChange={(evt) => {
-                  setAddonCategory({
-                    ...addonCategory,
-                    name: evt.target.value,
-                  });
-                }}
-              />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={checked}
-                    onChange={handleChange}
-                    inputProps={{ "aria-label": "controlled" }}
-                  />
-                }
-                label="Required"
-              ></FormControlLabel>
-              <AutocompleteComponent
-                label="Menus"
-                options={validMenusByLocation}
-                defaultValue={[defaultMenu]}
-                onChange={(options) => {
-                  setAddonCategory({
-                    ...addonCategory,
-                    menuIds: options.map((item) => item.id as number),
-                  });
-                }}
-              />
-              <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={createAddonCategory}
-                >
-                  Create
-                </Button>
-              </Box>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <CreateAddonCategory open={open} setOpen={setOpen} />
       </Box>
     </Layout>
   );

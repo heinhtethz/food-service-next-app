@@ -20,7 +20,7 @@ export const fetchMenusAddonCategories = createAsyncThunk(
   async (menuIds: Number[], thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/menusAddonCategories?menuIds=${menuIds.join(",")}`
+      `${config.apiBaseUrl}/menusAddonCategories?menuIds=${menuIds?.join(",")}`
     );
     const responseData = await response.json();
     thunkAPI.dispatch(setMenusAddonCategories(responseData));
