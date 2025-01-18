@@ -21,7 +21,7 @@ interface Props {
   children: ReactNode;
   address?: string;
   setSelectedMenuCategory?: React.Dispatch<
-    React.SetStateAction<MenuCategories | undefined>
+    React.SetStateAction<MenuCategories>
   >;
 }
 
