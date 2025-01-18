@@ -7,13 +7,10 @@ import { config } from "@/config/config";
 import FileDropZone from "@/component/FileDropZone";
 import AutocompleteComponent from "@/component/Autocomplete";
 import { addMenu } from "@/store/slices/menusSlice";
-import {
-  fetchMenusMenuCategoriesLocations,
-  setMenusMenuCategoriesLocations,
-} from "@/store/slices/menusMenuCategoriesLocations";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocations";
 
 interface Prop {
-  setOpen?: any;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateNewMenus = ({ setOpen }: Prop) => {

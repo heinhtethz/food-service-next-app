@@ -48,7 +48,7 @@ const Menus = () => {
                   key={menu.id}
                   style={{ textDecoration: "none" }}
                 >
-                  <Card sx={{ width: 250, mr: 2, borderRadius: 2, mt: 2 }}>
+                  <Card sx={{ width: 200, mr: 2, borderRadius: 2, mt: 2 }}>
                     <CardActionArea>
                       <CardMedia
                         component="img"
@@ -57,7 +57,7 @@ const Menus = () => {
                         alt="green iguana"
                       />
                       <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h6" component="div">
                           {menu.name}
                         </Typography>
                         <Typography

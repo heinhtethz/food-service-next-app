@@ -1,5 +1,6 @@
 import AutocompleteComponent from "@/component/Autocomplete";
 import Layout from "@/component/Layout";
+import SnackbarAction from "@/component/SnackbarAction";
 import { config } from "@/config/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -9,11 +10,13 @@ import {
 import { appData } from "@/store/slices/appSlice";
 import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 import {
+  Alert,
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -36,6 +39,7 @@ const EditAddonCategory = () => {
     addonCategoryId: Number(addonCategoryId),
   });
   const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const defaultAddonCategoryName = addonCategories
     .filter((item) => item.id === Number(addonCategoryId))
@@ -65,6 +69,9 @@ const EditAddonCategory = () => {
     const responseData = await response.json();
     dispatch(updateddonCategory(responseData));
     dispatch(fetchMenusAddonCategories(addonCategory.menuIds));
+    if (response.ok) {
+      setSnackbarOpen(true);
+    }
   };
 
   const handleDeleteAddonCategory = async () => {
@@ -135,6 +142,11 @@ const EditAddonCategory = () => {
             </Button>
           </DialogActions>
         </Dialog>
+        <SnackbarAction
+          open={snackbarOpen}
+          setOpen={setSnackbarOpen}
+          message="Updated Addon Category"
+        />
       </Box>
     </Layout>
   );

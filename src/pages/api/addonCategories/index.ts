@@ -7,10 +7,13 @@ const addonCategoryHandler = async (
 ) => {
   if (req.method === "PUT") {
     const { name, menuIds, addonCategoryId } = req.body;
-    const updateAddonCategory = await prisma.addonCategories.update({
-      data: { name },
-      where: { id: addonCategoryId },
-    });
+    if (name) {
+      const updateAddonCategory = await prisma.addonCategories.update({
+        data: { name },
+        where: { id: addonCategoryId },
+      });
+      res.status(200).send(updateAddonCategory);
+    }
 
     if (menuIds.length) {
       const existingMenus = await prisma.menusAddonCategories.findMany({
@@ -51,8 +54,8 @@ const addonCategoryHandler = async (
           where: { menuId: { in: removingMenuId }, addonCategoryId },
         });
       }
+      return res.send(200);
     }
-    return res.status(200).send(updateAddonCategory);
   } else if (req.method === "POST") {
     const { name, menuIds, isRequired } = req.body;
     if (!name) return res.status(401).send("Bad request");

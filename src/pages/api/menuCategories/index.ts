@@ -7,11 +7,13 @@ const menuCategoryHandler = async (
 ) => {
   if (req.method === "PUT") {
     const { name, menuIds, menuCategoryId, locationId } = req.body;
-    if (!name) return res.status(400).send("Bad Request");
-    const updateMenuCategory = await prisma.menuCategories.update({
-      data: { name },
-      where: { id: menuCategoryId as number },
-    });
+    if (name) {
+      const updateMenuCategory = await prisma.menuCategories.update({
+        data: { name },
+        where: { id: menuCategoryId as number },
+      });
+      res.status(200).send(updateMenuCategory);
+    }
     if (menuIds.length) {
       const existingData = await prisma.menusMenuCategoriesLocations.findMany({
         where: { menuCategoryId, locationId },
@@ -56,9 +58,8 @@ const menuCategoryHandler = async (
           where: { menuId: { in: removingMenuIds } },
         });
       }
+      return res.status(200).send("Ok");
     }
-
-    return res.status(200).send(updateMenuCategory);
   } else if (req.method === "POST") {
     const { name, locationId } = req.body;
     const newMenuCategory = await prisma.menuCategories.create({
@@ -89,7 +90,7 @@ const menuCategoryHandler = async (
         locationId: Number(locationId),
       },
     });
-    return res.status(200);
+    return res.send(200);
   } else {
     return res.status(405).send("Method not allowed");
   }

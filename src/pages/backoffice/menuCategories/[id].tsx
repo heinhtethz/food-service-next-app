@@ -1,10 +1,12 @@
 import {
+  Alert,
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   FormControlLabel,
+  Snackbar,
   Switch,
   TextField,
   Typography,
@@ -28,6 +30,8 @@ import {
   updateMenuCategory,
 } from "@/store/slices/menuCategoriesSlice";
 import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocations";
+import { FastForward } from "@mui/icons-material";
+import SnackbarAction from "@/component/SnackbarAction";
 
 const EditMenuCategory = () => {
   const { menus, menuCategories, menusMenuCategoriesLocations } =
@@ -64,10 +68,11 @@ const EditMenuCategory = () => {
   const [updateMenuId, setUpdateMenuId] = useState([] as Number[]);
   const [updateData, setUpdateData] = useState<Partial<MenuCategories>>();
   const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleUpdateMenuCategory = async () => {
-    const isValid = updateData?.name && updateMenuId?.length;
-    if (!isValid) return alert("Pls fill at least one of this fields");
+    const isValid = updateData?.name;
+    if (!isValid) return alert("Pls fill name");
     const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
       method: "PUT",
       headers: {
@@ -83,6 +88,9 @@ const EditMenuCategory = () => {
     const responseData = await response.json();
     dispatch(updateMenuCategory(responseData));
     dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    if (response.ok) {
+      setSnackbarOpen(true);
+    }
   };
 
   const handleDeleteMenuCategory = async () => {
@@ -151,6 +159,11 @@ const EditMenuCategory = () => {
             </Button>
           </DialogActions>
         </Dialog>
+        <SnackbarAction
+          open={snackbarOpen}
+          setOpen={setSnackbarOpen}
+          message="Updated Menu Category"
+        />
       </Box>
     </Layout>
   );

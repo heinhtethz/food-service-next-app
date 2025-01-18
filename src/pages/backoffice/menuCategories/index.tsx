@@ -19,6 +19,7 @@ import { getSelectedLocationId, menuCategoryByLocationId } from "@/utils";
 import Link from "next/link";
 import { addMenuCategory } from "@/store/slices/menuCategoriesSlice";
 import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocations";
+import CreateMenuCategory from "./CreateMenuCategory";
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
   width: 120,
@@ -31,34 +32,12 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
 const MenuCategories = () => {
   const { menuCategories, menusMenuCategoriesLocations } =
     useAppSelector(appData);
-  const dispatch = useAppDispatch();
-  const selectedLocationId = getSelectedLocationId() as string;
   const [open, setOpen] = useState(false);
-  const [menuCategoryName, setMenuCategoryName] = useState("");
-  const [checked, setChecked] = useState(true);
 
   const validMenuCategories = menuCategoryByLocationId(
     menusMenuCategoriesLocations,
     menuCategories
   );
-
-  const createMenuCategory = async () => {
-    if (!menuCategoryName) return alert("Name is required...");
-    const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: menuCategoryName,
-        locationId: Number(selectedLocationId),
-      }),
-    });
-    const responseData = await response.json();
-    dispatch(addMenuCategory(responseData));
-    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
-    setOpen(false);
-  };
 
   return (
     <Layout title="Menu Categories">
@@ -103,32 +82,7 @@ const MenuCategories = () => {
             <h1>No available menu category!</h1>
           )}
         </Box>
-
-        <Dialog open={open} onClose={() => setOpen(false)}>
-          <DialogTitle>Create New Menu Category</DialogTitle>
-          <DialogContent>
-            <form onSubmit={createMenuCategory}>
-              <TextField
-                placeholder="Name"
-                variant="outlined"
-                fullWidth
-                onChange={(evt) => {
-                  setMenuCategoryName(evt.target.value);
-                }}
-              />
-
-              <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={createMenuCategory}
-                >
-                  Create
-                </Button>
-              </Box>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <CreateMenuCategory open={open} setOpen={setOpen} />
       </Box>
     </Layout>
   );

@@ -12,40 +12,24 @@ import {
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { appData, fetchData } from "@/store/slices/appSlice";
+import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils";
 import { config } from "@/config/config";
 import Layout from "@/component/Layout";
 import Link from "next/link";
 import { addTable } from "@/store/slices/tablesSlice";
+import CreateTable from "./CreateTables";
 
 const Tables = () => {
   const { tables } = useAppSelector(appData);
   const selectedLocationId = getSelectedLocationId();
-  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
-  const [newTable, setNewTable] = useState({ name: "" });
+
   const validTables = tables.filter(
     (item) => item.locationId === Number(selectedLocationId)
   );
-
-  const createNewTable = async () => {
-    const response = await fetch(`${config.apiBaseUrl}/tables`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...newTable,
-        locationId: Number(selectedLocationId),
-      }),
-    });
-    const responseData = await response.json();
-    dispatch(addTable(responseData));
-    setOpen(false);
-  };
 
   return (
     <Layout title="Tables">
@@ -97,27 +81,7 @@ const Tables = () => {
             <h1>No available table!</h1>
           )}
         </Box>
-        <Dialog open={open} onClose={() => setOpen(false)}>
-          <DialogTitle sx={{ textAlign: "center" }}>
-            Create New Table
-          </DialogTitle>
-          <DialogContent sx={{ width: 400 }}>
-            <form onSubmit={createNewTable}>
-              <TextField
-                placeholder="Table name"
-                fullWidth
-                onChange={(evt) => {
-                  setNewTable({ name: evt.target.value });
-                }}
-              />
-              <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                <Button variant="contained" onClick={createNewTable}>
-                  Create
-                </Button>
-              </Box>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <CreateTable open={open} setOpen={setOpen} />
       </Box>
     </Layout>
   );

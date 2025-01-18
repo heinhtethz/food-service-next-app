@@ -15,7 +15,6 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import zIndex from "@mui/material/styles/zIndex";
 
 interface Props {
   window?: () => Window;

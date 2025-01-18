@@ -13,12 +13,14 @@ import {
   menusMenuCategoriesLocationsByLocationId,
 } from "@/utils";
 import {
+  Alert,
   Box,
   Button,
   Chip,
   Dialog,
   DialogActions,
   DialogContent,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -49,6 +51,7 @@ const EditMenu = () => {
 
   const [editMenu, setEditMenu] = useState<Partial<Menus>>();
   const [open, setOpen] = useState<boolean>(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const validMenuCategory = menuCategoryByLocationId(
     menusMenuCategoriesLocations,
@@ -100,6 +103,9 @@ const EditMenu = () => {
     const responseData = await response.json();
     dispatch(updateMenu(responseData));
     dispatch(fetchMenusMenuCategoriesLocations(locationId));
+    if (response.ok) {
+      setSnackbarOpen(true);
+    }
   };
 
   const handleDeleteMenu = async () => {
@@ -219,6 +225,20 @@ const EditMenu = () => {
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => setSnackbarOpen(false)}
+        >
+          <Alert
+            onClose={() => setSnackbarOpen(false)}
+            severity="success"
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            Updated Menu!
+          </Alert>
+        </Snackbar>
       </Box>
     </Layout>
   );

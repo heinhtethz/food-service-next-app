@@ -155,14 +155,14 @@ const NavBar = ({ title }: Props) => {
           )}
           <Typography
             variant="h5"
-            sx={{ flexGrow: 1, color: "#BA0101", fontFamily: "fantasy" }}
+            sx={{ flexGrow: 1, fontFamily: "fantasy" }}
+            color="primary"
           >
             {title ? `Food Service Pos - ${title}` : `Food Service Pos`}
           </Typography>
           {data ? (
             <Button
               variant="contained"
-              sx={{ bgcolor: "#BA0101", color: "white" }}
               onClick={() => {
                 signOut({ callbackUrl: "/auth/signin" });
               }}
