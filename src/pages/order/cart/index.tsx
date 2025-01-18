@@ -1,7 +1,7 @@
 import OrderAppLayout from "@/component/OrderLayout";
 import { config } from "@/config/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { appData, fetchData } from "@/store/slices/appSlice";
+import { appData } from "@/store/slices/appSlice";
 import { removeallCartItem, removeCart } from "@/store/slices/cartSlice";
 import { addOrder } from "@/store/slices/ordersSlice";
 import { CartItem } from "@/typings";
@@ -18,6 +18,8 @@ const Review = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const query = router.query;
+  const locationId = query.locationId as string;
+  const tableId = query.tableId as string;
 
   useEffect(() => {
     if (!carts.length) {
@@ -55,9 +57,6 @@ const Review = () => {
   };
 
   const confirmOrder = async () => {
-    const { locationId, tableId } = query;
-    const isValid = locationId && tableId && carts.length;
-    if (!isValid) return alert("Required locationId and tableId");
     const response = await fetch(
       `${config.apiBaseUrl}/orders?locationId=${locationId}&tableId=${tableId}`,
       {
@@ -159,8 +158,10 @@ const Review = () => {
               Total : {getCartTotalPrice(carts)}
             </Typography>
           </Box>
-          <Box sx={{ mt: 3, textAlign: "center" }} onClick={confirmOrder}>
-            <Button variant="contained">Confirm order</Button>
+          <Box sx={{ mt: 3, textAlign: "center" }}>
+            <Button variant="contained" onClick={() => confirmOrder()}>
+              Confirm order
+            </Button>
           </Box>
         </Box>
       </Box>

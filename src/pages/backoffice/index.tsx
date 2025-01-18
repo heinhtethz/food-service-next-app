@@ -8,9 +8,7 @@ import { useEffect } from "react";
 const BackofficeApp = () => {
   const { status } = useSession();
   const router = useRouter();
-  const { locations } = useAppSelector(appData);
   const { isLoading } = useAppSelector((state) => state.app);
-  const locationIdFromLocalStorage = getSelectedLocationId();
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -21,17 +19,6 @@ const BackofficeApp = () => {
       router.push("/auth/signin");
     }
   }, [status, router, isLoading]);
-
-  useEffect(() => {
-    if (locations.length) {
-      if (!locationIdFromLocalStorage) {
-        const firstLocationId = String(locations[0].id);
-        if (typeof window !== "undefined" && window.localStorage) {
-          localStorage.setItem("selectedLocationId", firstLocationId);
-        }
-      }
-    }
-  }, [locations, locationIdFromLocalStorage]);
 
   return null;
 };

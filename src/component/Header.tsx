@@ -15,12 +15,14 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 interface Props {
   window?: () => Window;
 }
 
 const Header = ({ window }: Props) => {
+  const router = useRouter();
   const trigger = useScrollTrigger({
     target: window ? window() : undefined,
   });
@@ -30,7 +32,7 @@ const Header = ({ window }: Props) => {
   return (
     <>
       <Slide appear={false} direction="down" in={!trigger}>
-        <AppBar sx={{ bgcolor: "white", p: 1 }}>
+        <AppBar sx={{ bgcolor: "white", p: 2 }}>
           <Toolbar>
             <Box
               sx={{
@@ -48,24 +50,28 @@ const Header = ({ window }: Props) => {
               >
                 Food Service{" "}
               </Typography>
-              <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <Link href="/order?locationId=1&tableId=1" sx={{ mr: 1 }}>
-                  <Button
-                    variant="contained"
-                    sx={{ backgroundColor: "primary", borderRadius: 5 }}
-                  >
-                    Order App
-                  </Button>
-                </Link>
-                <Link href="/backoffice">
-                  <Button
-                    variant="contained"
-                    sx={{ backgroundColor: "primary", borderRadius: 5 }}
-                  >
-                    Backoffice App
-                  </Button>
-                </Link>
-              </Box>
+              {router.pathname === "/auth/signin" ? (
+                <></>
+              ) : (
+                <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                  <Link href="/order?locationId=1&tableId=1" sx={{ mr: 1 }}>
+                    <Button
+                      variant="contained"
+                      sx={{ backgroundColor: "primary", borderRadius: 5 }}
+                    >
+                      Order App
+                    </Button>
+                  </Link>
+                  <Link href="/backoffice">
+                    <Button
+                      variant="contained"
+                      sx={{ backgroundColor: "primary", borderRadius: 5 }}
+                    >
+                      Backoffice App
+                    </Button>
+                  </Link>
+                </Box>
+              )}
               <IconButton
                 sx={{ display: { xs: "flex", md: "none" } }}
                 onClick={() => (open ? setOpen(false) : setOpen(true))}

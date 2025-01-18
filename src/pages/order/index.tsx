@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 const OrderApp = () => {
   const router = useRouter();
   const { query } = router;
-  const dispatch = useAppDispatch();
   const { menuCategories, menus, locations, menusMenuCategoriesLocations } =
     useAppSelector(appData);
   const currentLocation = locations.find(

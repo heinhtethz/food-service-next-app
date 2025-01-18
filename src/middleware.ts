@@ -3,7 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 const middleware = async (req: NextRequest) => {
   const path = req.nextUrl.pathname;
-  if (path?.includes("/app") || path?.includes("/auth")) {
+  if (
+    path?.includes("/app") ||
+    path?.includes("/auth") ||
+    path?.includes("/orders")
+  ) {
     return NextResponse.next();
   }
 
