@@ -1,12 +1,10 @@
 import MenuCard from "@/component/MenuCard";
 import OrderAppLayout from "@/component/OrderLayout";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { menusByMenuCategoryId } from "@/utils";
 import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
 import { Locations, MenuCategories } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,6 +12,7 @@ import { useEffect, useState } from "react";
 const OrderApp = () => {
   const router = useRouter();
   const { query } = router;
+
   const { menuCategories, menus, locations, menusMenuCategoriesLocations } =
     useAppSelector(appData);
   const currentLocation = locations.find(
@@ -46,12 +45,27 @@ const OrderApp = () => {
     });
   };
 
-  if (!selectedMenuCategory)
-    return (
-      <OrderAppLayout
-        address={currentAddress}
-        setSelectedMenuCategory={setSelectedMenuCategory}
-      >
+  return (
+    <OrderAppLayout
+      address={currentAddress}
+      setSelectedMenuCategory={setSelectedMenuCategory}
+    >
+      {selectedMenuCategory ? (
+        <Box sx={{ width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "center", sm: "flex-start" },
+              flexWrap: "wrap",
+              gap: 3,
+              mt: 2,
+              px: 3,
+            }}
+          >
+            {renderMenus()}
+          </Box>
+        </Box>
+      ) : (
         <Box
           sx={{
             display: "flex",
@@ -61,27 +75,7 @@ const OrderApp = () => {
         >
           <CircularProgress />
         </Box>
-      </OrderAppLayout>
-    );
-  return (
-    <OrderAppLayout
-      address={currentAddress}
-      setSelectedMenuCategory={setSelectedMenuCategory}
-    >
-      <Box sx={{ width: "100%" }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: { xs: "center", sm: "flex-start" },
-            flexWrap: "wrap",
-            gap: 3,
-            mt: 2,
-            px: 3,
-          }}
-        >
-          {renderMenus()}
-        </Box>
-      </Box>
+      )}
     </OrderAppLayout>
   );
 };
