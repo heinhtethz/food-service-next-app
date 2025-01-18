@@ -69,7 +69,6 @@ const Review = () => {
       }
     );
     const responseJSON = await response.json();
-    console.log(responseJSON.id);
     if (response.ok) {
       dispatch(removeallCartItem());
       dispatch(addOrder(responseJSON));
